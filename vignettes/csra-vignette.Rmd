@@ -1,0 +1,52 @@
+---
+title: "csra-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{csra-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(csra)
+```
+
+```{r}
+data("datex")
+
+equalparts(
+  data = datex,
+  independent = 'VDEM_v2x_polyarchy_lag',
+  lag_independent = FALSE,
+  dependent = 'NVC_1.3_NONVIOL',
+  n = 6,
+  bar_or_scatter = 'scatter',
+  regline = TRUE,
+  return_data = FALSE,
+  conf_bars = TRUE,
+  range_bars = FALSE,
+  save_plot = FALSE
+)
+
+equalparts(
+  data = datex,
+  independent = 'VDEM_v2x_polyarchy',
+  lag_independent = TRUE,
+  lag_code = "iso3",
+  lead = TRUE,
+  dependent = 'NVC_1.3_NONVIOL',
+  n = 10,
+  bar_or_scatter = 'bar',
+  nominal_or_percent = "percent",
+  return_data = FALSE,
+  conf_bars = TRUE
+)
+```
+

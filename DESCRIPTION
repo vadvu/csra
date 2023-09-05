@@ -1,0 +1,25 @@
+Package: csra
+Title: Analysis of count data
+Version: 0.0.0.9000
+Authors@R: 
+    person("Vadim", "Ustyuzhanin", , "vvustiuzhanin@yandex.ru", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-3800-1108"))
+Description: Some functions that are used by CSRA staff in quantitative analysis of political events.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    dplyr,
+    sjmisc,
+    ggplot2,
+    stats
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
