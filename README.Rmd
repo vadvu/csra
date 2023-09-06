@@ -85,26 +85,4 @@ plot + xlab("x var name") + ylab("y var name") + theme_grey()
 
 ```
 
-Also table with results can be returned, just set `return_data = TRUE`
-
-```{r example3}
-library(csra)
-library(ggplot2)
-data <- data("dataex")
-
-equalparts(
-  data = datex,
-  independent = 'VDEM_v2x_polyarchy',
-  lag_independent = T,
-  lag_code = "iso3",
-  lead = T,
-  dependent = 'NVC_1.3_NONVIOL',
-  n = 6,
-  bar_or_scatter = 'scatter',
-  regline = TRUE,
-  return_data = TRUE, #here
-  conf_bars = TRUE,
-  range_bars = FALSE,
-  save_plot = FALSE
-)
-```
+Also table with results can be returned, just set return_data = TRUE
