@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 
-csra is a package with functions (now just 1) used by [CSRA](https://social.hse.ru/mr/) staff analyzing political events
+csra is a package with functions used by [CSRA](https://social.hse.ru/mr/) staff analyzing political events
 
 ## Installation
 
@@ -34,7 +34,7 @@ devtools::install_github("vadvu/csra")
 
 ## Example
 
-This is a basic example which shows you how the main (and the only one now) function "equalparts" works:
+This is a basic example which shows you how the main function "equalparts" works:
 
 ```{r example 1}
 library(csra)
@@ -109,4 +109,30 @@ equalparts(
   save_plot = FALSE
 )
 ```
+
+Another function that is in DEMO stage now - U_shape_test. It is needed to detect hump-shaped form of links. 
+Now only rare events logistic model has been implemented now (but the logic is suit for all glm)
+
+
+```{r example4}
+library(csra)
+data <- data("dataex")
+
+U_shape_test(
+  data = datex, #our data
+  dep_var = "NVC_1.3_NONVIOL", #dependent variable
+  ind_var = "VDEM_v2x_polyarchy_lag", #independent var
+  control_vars = c("UN_Total_Population_log", "UN_Median_Age"), #control vars
+  boot = TRUE, #bootstrap for middle point analysis
+  vcov_type = "HC", #type of SE
+  n = 10, #number of bootstraps. Too small in this example
+  save_plot = FALSE, #we do not need to save plot
+  save_table = FALSE #we do not need to save regression table
+)
+```
+
+
+
+
+
 
