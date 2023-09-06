@@ -13,7 +13,16 @@ Imports:
     dplyr,
     sjmisc,
     ggplot2,
-    stats
+    stats,
+    sandwich,
+    tidyr,
+    lmtest,
+    mgcv,
+    brglm2,
+    stargazer,
+    doParallel,
+    foreach,
+    ggeffects
 Depends: 
     R (>= 2.10)
 LazyData: true
