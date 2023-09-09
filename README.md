@@ -139,12 +139,12 @@ negative coefficients on the first and second subsample respectively.
 4. A semiparametric model is estimated without assumptions about the
 form of the link. The GAM method is used for this purpose. The variable
 of interest is modelled as a smooth term using cubic splines while other
-variables are modelled using parametric regressions. 5. ANOVA test
-between the model with a polynomial term (1st step) and GAM model (4th
-step). This test is needed to identify whether the polynomial term
-provides a better or not worse fit than the link found by the GAM
-splines. If p \> 0.1, then the polynomial is considered a good
-approximation.  
+variables are modelled using parametric regressions.  
+5. ANOVA test between the model with a polynomial term (1st step) and
+GAM model (4th step). This test is needed to identify whether the
+polynomial term provides a better or not worse fit than the link found
+by the GAM splines. If p \> 0.1, then the polynomial is considered a
+good approximation.  
 6. This is the final stage.  
 **IF** the polynomial term is significant (1st stage) **AND** there are
 significant opposite signs on subsamples (2nd stage), **AND** the GAM
