@@ -130,7 +130,7 @@ logistic model has been implemented, although the logic is suitable for
 all GLMs. This method operates in the following way:  
 1. The full model is estimated on a sample with a polynomial term. Let’s
 say it is:  
-$$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times x_i^2 + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$  
+$$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times x_i^2 + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$
 where $\beta_k$ are coefficients, $x$ is our variable of interest which
 we assume has a U-shape relationship with $y$, $z_{k}$ are control
 variables, $y$ is our dependent variable and $\varepsilon$ is a error
@@ -148,12 +148,12 @@ form of the link. The GAM method is used for this purpose. The variable
 of interest is modelled as a smooth term using cubic splines while other
 variables are modelled using parametric regressions. In our case it
 is:  
-$$y_i = \beta_0 + f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$  
+$$y_i = \beta_0 + f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$
 where $f(x_i)$ is a smooth term.  
 5. ANOVA test between the model with a polynomial term (1st step) and
 GAM model (4th step). This test is needed to identify whether the
 polynomial term provides a better or not worse fit than the link found
-by the GAM splines. If p \> 0.1, then the polynomial is considered a
+by the GAM splines. If $p > 0.1$, then the polynomial is considered a
 good approximation.  
 6. This is the final stage.  
 **IF** the polynomial term is significant (1st stage) **AND** there are
