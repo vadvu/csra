@@ -20,7 +20,7 @@ You can install the development version of csra from
 devtools::install_github("vadvu/csra")
 ```
 
-## Example
+## Example 1
 
 This is a basic example which shows you how the main function
 “equalparts” works:
@@ -121,9 +121,34 @@ equalparts(
 #> 12 0.007552358
 ```
 
-Another function that is in DEMO stage now - U_shape_test. It is needed
-to detect hump-shaped form of links. Now only rare events logistic model
-has been implemented now (but the logic is suit for all glm)
+\##Example 2
+
+Another function (in the DEMO stage) is the U_shape_test, which aims to
+detect hump-shaped forms of links. Currently, only a rare events
+logistic model has been implemented, although the logic is suitable for
+all GLMs. This method operates in the following way: 1. The full model
+is estimated on a sample with a polynomial term. 2. Divide the sample
+into two subsamples - the first being below the midpoint (which is
+identified as the vertex of the parabola from the polynomial term), and
+the second being above it. 3. Estimate two models on the two subsamples.
+A hump-shaped relationship assumes that there is both an ascending and a
+descending part. So, in order to test a hump, it is necessary to have
+significant positive and negative coefficients on the first and second
+subsample respectively. 4. A semiparametric model is estimated without
+assumptions about the form of the link. The GAM method is used for this
+purpose. The variable of interest is modelled as a smooth term using
+cubic splines while other variables are modelled using parametric
+regressions. 5. ANOVA test between the model with a polynomial term (1st
+step) and GAM model (4th step). This test is needed to identify whether
+the polynomial term provides a better or not worse fit than the link
+found by the GAM splines. If p \> 0.1, then the polynomial is considered
+a good approximation. 6. This is the final stage. If the polynomial term
+is significant (1st stage) and there are significant opposite signs on
+subsamples (2nd stage), and the GAM term is significant in terms of EDF
+significance (4th stage), and the ANOVA test’s p-value is greater than
+0.1 (5th stage), then there exists a hump-shaped or U-shaped link
+between the variables. In this case, the polynomial term is suitable for
+approximating such a relationship.
 
 ``` r
 library(csra)
@@ -134,7 +159,7 @@ U_shape_test(
   dep_var = "NVC_1.3_NONVIOL", #dependent variable
   ind_var = "VDEM_v2x_polyarchy_lag", #independent var
   control_vars = c("UN_Total_Population_log", "UN_Median_Age"), #control vars
-  boot = TRUE, #bootstrap for middle point analysis
+  boot = FALSE, #bootstrap for middle point analysis. Is not used in the example
   vcov_type = "HC", #type of SE
   n = 10, #number of bootstraps. Too small in this example
   save_plot = FALSE, #we do not need to save plot
@@ -161,7 +186,7 @@ U_shape_test(
 #>                                       (0.519)           
 #> --------------------------------------------------------
 #> U-shape test:                                           
-#> ....Extreme point             0.389 [ 0.036 - 0.826 ]   
+#> ....Extreme point                      0.389            
 #> ....Slope at Xlower                   2.62***           
 #> ....Slope at Xhigher                 -5.62***           
 #> GAM test:                                               
@@ -190,7 +215,7 @@ U_shape_test(
 #> [16] "                                      (0.519)           "
 #> [17] "--------------------------------------------------------"
 #> [18] "U-shape test:                                           "
-#> [19] "....Extreme point             0.389 [ 0.036 - 0.826 ]   "
+#> [19] "....Extreme point                      0.389            "
 #> [20] "....Slope at Xlower                   2.62***           "
 #> [21] "....Slope at Xhigher                 -5.62***           "
 #> [22] "GAM test:                                               "
