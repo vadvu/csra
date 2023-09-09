@@ -121,7 +121,7 @@ equalparts(
 #> 12 0.007552358
 ```
 
-\##Example 2
+## Example 2
 
 Another function (in the DEMO stage) is the U_shape_test, which aims to
 detect hump-shaped forms of links. Currently, only a rare events
