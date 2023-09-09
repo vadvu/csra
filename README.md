@@ -148,7 +148,7 @@ form of the link. The GAM method is used for this purpose. The variable
 of interest is modelled as a smooth term using cubic splines while other
 variables are modelled using parametric regressions. In our case it
 is:  
-$$ y_i = \beta_0 + f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i $$  
+$$y_i = \beta_0 + f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$  
 where $f(x_i)$ is a smooth term.  
 5. ANOVA test between the model with a polynomial term (1st step) and
 GAM model (4th step). This test is needed to identify whether the
