@@ -161,7 +161,6 @@ U_shape_test(
   control_vars = c("UN_Total_Population_log", "UN_Median_Age"), #control vars
   boot = FALSE, #bootstrap for middle point analysis. Is not used in the example
   vcov_type = "HC", #type of SE
-  n = 10, #number of bootstraps. Too small in this example
   save_plot = FALSE, #we do not need to save plot
   save_table = FALSE #we do not need to save regression table
 )
