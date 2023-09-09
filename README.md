@@ -128,10 +128,17 @@ Another function (in the DEMO stage) is the `U_shape_test()`, which aims
 to detect hump-shaped forms of links. Currently, only a rare events
 logistic model has been implemented, although the logic is suitable for
 all GLMs. This method operates in the following way:  
-1. The full model is estimated on a sample with a polynomial term.  
+1. The full model is estimated on a sample with a polynomial term. Let’s
+say it is:  
+$$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times x_i^2 + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$  
+where $\beta_k$ are coefficients, $x$ is our variable of interest which
+we assume has a U-shape relationship with $y$, $z_{k}$ are control
+variables, $y$ is our dependent variable and $\varepsilon$ is a error
+term.  
 2. Divide the sample into two subsamples - the first being below the
 midpoint (which is identified as the vertex of the parabola from the
-polynomial term), and the second being above it.  
+polynomial term: $\frac{-\beta_1}{2\times \beta_2}$), and the second
+being above it.  
 3. Estimate two models on the two subsamples. A hump-shaped relationship
 assumes that there is both an ascending and a descending part. So, in
 order to test a hump, it is necessary to have significant positive and
@@ -139,7 +146,10 @@ negative coefficients on the first and second subsample respectively.
 4. A semiparametric model is estimated without assumptions about the
 form of the link. The GAM method is used for this purpose. The variable
 of interest is modelled as a smooth term using cubic splines while other
-variables are modelled using parametric regressions.  
+variables are modelled using parametric regressions. In our case it
+is:  
+$$ y_i = \beta_0 + f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i $$  
+where $f(x_i)$ is a smooth term.  
 5. ANOVA test between the model with a polynomial term (1st step) and
 GAM model (4th step). This test is needed to identify whether the
 polynomial term provides a better or not worse fit than the link found
