@@ -7,7 +7,7 @@
 <!-- badges: end -->
 
 csra is a package with functions used by
-[CSRA](https://social.hse.ru/mr/) staff analyzing political events
+[CSRA](https://social.hse.ru/mr/) staff to analyze political events.
 
 ## Installation
 
@@ -20,7 +20,7 @@ You can install the development version of csra from
 devtools::install_github("vadvu/csra")
 ```
 
-## Example 1
+## Example 1: `equalparts()`
 
 This is a basic example which shows you how the main function
 `equalparts()` works:
@@ -60,7 +60,7 @@ save function output and add to it ggplot2 blocks:
 ``` r
 library(csra)
 library(ggplot2)
-data <- data("dataex")
+data("datex")
 
 plot <- equalparts(
   data = datex,
@@ -89,7 +89,7 @@ Also table with results can be returned, just set `return_data = TRUE`:
 ``` r
 library(csra)
 library(ggplot2)
-data <- data("dataex")
+data("datex")
 
 equalparts(
   data = datex,
@@ -122,7 +122,7 @@ equalparts(
 #> 12 0.007552358
 ```
 
-## Example 2
+## Example 2: `U_shape_test()`
 
 Another function (in the DEMO stage) is the `U_shape_test()`, which aims
 to detect hump-shaped forms of links. Currently, only a rare events
@@ -155,6 +155,9 @@ GAM model (4th step). This test is needed to identify whether the
 polynomial term provides a better or not worse fit than the link found
 by the GAM splines. If $p > 0.1$, then the polynomial is considered a
 good approximation.  
+5.5 Bootstrap of a midpoint ($\frac{-\beta_1}{2\times \beta_2}$) for
+constructing CI. This is optional, but highly recommended stage. Now it
+works unstable in the function…  
 6. This is the final stage.  
 **IF** the polynomial term is significant (1st stage) **AND** there are
 significant opposite signs on subsamples (2nd stage), **AND** the GAM
@@ -162,11 +165,20 @@ term is significant in terms of EDF significance (4th stage), **AND**
 the ANOVA test’s p-value is greater than 0.1 (5th stage), **THEN** there
 exists a hump-shaped or U-shaped link between the variables. In this
 case, the polynomial term is suitable for approximating such a
-relationship.
+relationship.  
+This approach is based on 2 papers that define the overall strategy for
+identifying a U-shaped relationship with continuous data (i.e. with a
+linear regression model):  
+1. Lind, J. T., & Mehlum, H. (2010). With or without U? The appropriate
+test for a U‐shaped relationship. Oxford bulletin of economics and
+statistics, 72(1), 109-118.  
+2. Simonsohn, U. (2018). Two lines: A valid alternative to the invalid
+testing of U-shaped relationships with quadratic regressions. Advances
+in Methods and Practices in Psychological Science, 1(4), 538-555.
 
 ``` r
 library(csra)
-data <- data("dataex")
+data("datex")
 
 U_shape_test(
   data = datex, #our data
