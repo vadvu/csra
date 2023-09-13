@@ -113,9 +113,23 @@ equalparts(
 
 ## Example 2: `U_shape_test()`
 
-Another function (in the DEMO stage) is the `U_shape_test()`, which aims to detect hump-shaped forms of links. Currently, only a rare events logistic model has been implemented, although the logic is suitable for all GLMs. 
-This method operates in the following way:  
-1. The full model is estimated on a sample with a polynomial term. Let's say it is:    
+Another function (in the DEMO stage) is the `U_shape_test()`, which aims to detect hump-shaped forms of links. Currently, only a rare events logistic model has been implemented, although the logic is suitable for all GLMs.  
+What is U-shape? Simply put, it is the link between variables that is similar to parabola. Usually, it is modeled as polynomial term in the regression equitation, but it's not the only one option. What is really important in the case of U-shape is that there is only one extreme point (as parabola has). Moreover, the slope of such curve should be positive (negative) on the interval $[x_{min},x_{midpoint}]$ and negative (positive) on the interval $[x_{midpoint},x_{max}]$. Let's say we have such equation:  
+$$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$  
+where $\beta_k$ are coefficients, $x$ is our variable of interest which we assume has a U-shape relationship with $y$ by this part of formula: $\beta_1\times x_i + \beta_2\times f(x_i)$, $z_{k}$ are control variables, $y$ is our dependent variable and $\varepsilon$ is a error term.  
+Then by definition of the U-shape that described earlier, this inequality should be implied:  
+$$\beta_1 + \beta_2\times f'(x_i \in [x_{min},x_{midpoint}]) <0<\beta_1 + \beta_2\times f'(x_i \in [x_{midpoint}, x_{max}])$$  
+This condition can be reformulated as 2 hypotheses for subsampled models:  
+$$y_i = \beta_0 + \beta_{lower}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{min},x_{midpoint}] (1)$$  
+and  
+$$y_i = \beta_0 + \beta_{higher}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{midpoint}, x_{max}] (2)$$    
+And hypotheses are:  
+* $H_L: \beta_{lower}>0$, for equitation 1
+* $H_H: \beta_{higher}<0$, for equitation 2
+
+
+This method in the function `U_shape_test()` operates more complicates in the following way:  
+1. The full model is estimated on a sample with a polynomial term. Let's say it is:  
 $$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times x_i^2 + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$
 where $\beta_k$ are coefficients, $x$ is our variable of interest which we assume has a U-shape relationship with $y$,
 $z_{k}$ are control variables, $y$ is our dependent variable and $\varepsilon$ is a error term.    
