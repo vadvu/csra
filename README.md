@@ -151,10 +151,10 @@ $$y_i = \beta_0 + \beta_{lower}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + 
 and  
 $$y_i = \beta_0 + \beta_{higher}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{midpoint}, x_{max}] (2)$$  
 And hypotheses are:  
-\* $H_L: \beta_{lower}>0$, for equitation 1 \* $H_H: \beta_{higher}<0$,
-for equitation 2
++ $H_L: \beta_{lower}>0$, for equitation 1  
++ $H_H: \beta_{higher}<0$, for equitation 2
 
-This method in the function `U_shape_test()` operates more complicates
+This method in the function `U_shape_test()` operates more complicated
 in the following way:  
 1. The full model is estimated on a sample with a polynomial term. Let’s
 say it is:  

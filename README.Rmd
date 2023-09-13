@@ -124,11 +124,11 @@ $$y_i = \beta_0 + \beta_{lower}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + 
 and  
 $$y_i = \beta_0 + \beta_{higher}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{midpoint}, x_{max}] (2)$$    
 And hypotheses are:  
-* $H_L: \beta_{lower}>0$, for equitation 1
-* $H_H: \beta_{higher}<0$, for equitation 2
++ $H_L: \beta_{lower}>0$, for equitation 1  
++ $H_H: \beta_{higher}<0$, for equitation 2  
 
 
-This method in the function `U_shape_test()` operates more complicates in the following way:  
+This method in the function `U_shape_test()` operates more complicated in the following way:  
 1. The full model is estimated on a sample with a polynomial term. Let's say it is:  
 $$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times x_i^2 + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$
 where $\beta_k$ are coefficients, $x$ is our variable of interest which we assume has a U-shape relationship with $y$,
