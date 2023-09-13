@@ -111,7 +111,7 @@ equalparts(
 )
 ```
 
-The columns in the table are:
+The columns in the table are:  
 1. parts - equal subsample. In our case - sixtiles.  
 2. Freq_0 - number of observations with "0" values.  
 3. Freq_1 - number of observations with "1" values.  

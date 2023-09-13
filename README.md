@@ -122,8 +122,8 @@ equalparts(
 #> 12 0.007552358
 ```
 
-The columns in the table are: 1. parts - equal subsample. In our case -
-sixtiles.  
+The columns in the table are:  
+1. parts - equal subsample. In our case - sixtiles.  
 2. Freq_0 - number of observations with “0” values.  
 3. Freq_1 - number of observations with “1” values.  
 4. means - mean of independent interval of equal part (scatter plot
