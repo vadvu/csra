@@ -122,6 +122,22 @@ equalparts(
 #> 12 0.007552358
 ```
 
+The columns in the table are: 1. parts - equal subsample. In our case -
+sixtiles.  
+2. Freq_0 - number of observations with “0” values.  
+3. Freq_1 - number of observations with “1” values.  
+4. means - mean of independent interval of equal part (scatter plot
+between Freq_1 and means is the basic plot that is pictured earlier).  
+5. min - min value of independent interval of equal part.  
+6. max - max value of independent interval of equal part.  
+7. prc5 - 5 percentile value of independent interval of equal part.  
+8. prc95 - 95 percentile value of independent interval of equal part.  
+9. low95CI - lower Wald 95% interval (2.5%). Wald CI are:  
+$$ \pi \pm z_{a/2}\times \sqrt{\frac{\pi\times(1-\pi)}{n}} $$  
+where $\pi$ is an estimated probability, and $z_{a/2} = 1.96$ due to 95%
+CI.  
+10. high95CI - higher Wald 95% interval (97.5%).
+
 ## Example 2: `U_shape_test()`
 
 Another function (in the DEMO stage) is the `U_shape_test()`, which aims
