@@ -133,7 +133,7 @@ between Freq_1 and means is the basic plot that is pictured earlier).
 7. prc5 - 5 percentile value of independent interval of equal part.  
 8. prc95 - 95 percentile value of independent interval of equal part.  
 9. low95CI - lower Wald 95% interval (2.5%). Wald CI are:  
-$$ \pi \pm z_{a/2}\times \sqrt{\frac{\pi\times(1-\pi)}{n}} $$  
+$$\pi \pm z_{a/2}\times \sqrt{\frac{\pi\times(1-\pi)}{n}}$$  
 where $\pi$ is an estimated probability, and $z_{a/2} = 1.96$ due to 95%
 CI.  
 10. high95CI - higher Wald 95% interval (97.5%).
