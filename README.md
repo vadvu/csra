@@ -150,7 +150,7 @@ models:
 $$y_i = \beta_0 + \beta_{lower}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{min},x_{midpoint}] (1)$$  
 and  
 $$y_i = \beta_0 + \beta_{higher}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{midpoint}, x_{max}] (2)$$  
-And hypotheses are:  
+And hypotheses are (for inverse U-shape):  
 + $H_L: \beta_{lower}>0$, for equitation 1  
 + $H_H: \beta_{higher}<0$, for equitation 2
 
