@@ -60,7 +60,7 @@ square brackets
 3. p-value of a t-statistics that is in the brackets  
 4. Chi-squared statistics with stars indicating the p \<0.01 level of
 significance (note, in this function
-$^{***}p<0.01, ^{**}p<0.05, ^{*}p<0.1$)
+$^{***}p<0.01, ^{**}p<0.05, ^{*}p<0.1$ )
 
 Plot that is returned by default can be easily changed by
 [ggplot2](https://github.com/tidyverse/ggplot2/tree/main) syntax. Just
