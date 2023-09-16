@@ -51,7 +51,7 @@ equalparts(
 )
 ```
 
-<img src="man/figures/README-example 1-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 The note section is constructed as follows:  
 1. Pearson’s r  
@@ -91,7 +91,7 @@ plot <- equalparts(
 plot + xlab("x var name") + ylab("y var name") + theme_grey()
 ```
 
-<img src="man/figures/README-example2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 Also table with results can be returned, just set `return_data = TRUE`:
 
@@ -308,4 +308,4 @@ U_shape_test(
 #> [[2]]
 ```
 
-<img src="man/figures/README-example4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

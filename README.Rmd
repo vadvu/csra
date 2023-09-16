@@ -37,7 +37,7 @@ devtools::install_github("vadvu/csra")
 
 This is a basic example which shows you how the main function `equalparts()` works:
 
-```{r example 1}
+```{r}
 library(csra)
 data <- data("dataex") #it's an example panel data that you can use
 
@@ -70,7 +70,7 @@ The note section is constructed as follows:
 
 Plot that is returned by default can be easily changed by [ggplot2](https://github.com/tidyverse/ggplot2/tree/main) syntax. Just save function output and add to it ggplot2 blocks: 
 
-```{r example2}
+```{r}
 library(csra)
 library(ggplot2)
 data("datex")
@@ -98,7 +98,7 @@ plot + xlab("x var name") + ylab("y var name") + theme_grey()
 
 Also table with results can be returned, just set `return_data = TRUE`:
 
-```{r example3}
+```{r}
 library(csra)
 library(ggplot2)
 data("datex")
@@ -172,7 +172,7 @@ This approach is based on 2 papers that define the overall strategy for identify
 - Lind, J. T., & Mehlum, H. (2010). With or without U? The appropriate test for a U‐shaped relationship. Oxford bulletin of economics and statistics, 72(1), 109-118.  
 - Simonsohn, U. (2018). Two lines: A valid alternative to the invalid testing of U-shaped relationships with quadratic regressions. Advances in Methods and Practices in Psychological Science, 1(4), 538-555.  
 
-```{r example4}
+```{r}
 library(csra)
 data("datex")
 
