@@ -3,6 +3,7 @@
 export(U_shape_test)
 export(equalparts)
 import(brglm2)
+import(confintr)
 import(doParallel)
 import(dplyr)
 import(foreach)

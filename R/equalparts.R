@@ -41,7 +41,7 @@
 #' prc95: 95% percentile of an independent variable in specific equal part
 #' low95CI: lower border of 95% CI of Freq_1
 #' high95CI: higher border of 95% CI of Freq_1
-#' @import dplyr ggplot2 stats
+#' @import dplyr ggplot2 stats confintr
 #' @examples
 #' data("datex")
 #' equalparts(data = datex,
@@ -214,19 +214,19 @@ equalparts <-
 
       }
       if (bar_or_scatter == "scatter") {
-        lm <- summary(lm(data = s_return, as.numeric(Freq_1) ~ means))
-        r <- round((lm$r.squared) ** 0.5, 3)
-        t <- round(r * ((n - 2) / (1 - r ** 2)) ** 0.5, 2)
-        p <- round(2 * pt(
-          q = t,
-          df = n - 1,
-          lower.tail = FALSE
-        ), 3)
+        rr <-
+          confintr::ci_cor(x = s_return$means,
+                           y = s_return$Freq_1,
+                           method = "pearson")
+        r <- round((rr$estimate), 2)
+        t <- r * ((nrow(s_return) - 2) / (1 - r ^ 2)) ^ 0.5
+        t <- round(t, 2)
+        p <- pt(t, nrow(s_return) - 2, lower.tail = F)
+        p <- round(p, 3)
+        cil = as.numeric( round(rr$interval[1], 3) )
+        cih = as.numeric( round(rr$interval[2], 3) )
         if (p == 0) {
           p = "<0.001"
-        }
-        if (as.numeric(lm$coefficients[2, 1]) < 0) {
-          r <- -1 * r
         }
 
         pl <- ggplot(data = s_return, aes(x = means, y = Freq_1)) +
@@ -236,33 +236,34 @@ equalparts <-
           theme_classic() +
           labs(
             caption = paste0(
-              "Pearson r = ",
+              "Pearson's r = ",
               r,
+              " [",
+              cil,
+              " - ",
+              ifelse(cih > 0, cih, paste0("(", cih, ")")),
+              "]",
               ", p = ",
               p,
               " (t = ",
               t,
               ")",
-              ifelse(
-                lm$coefficients[2, 4] < 0.01,
-                "***, ",
-                ifelse(
-                  lm$coefficients[2, 4] < 0.05,
-                  "**, ",
-                  ifelse(lm$coefficients[2, 4] <
-                           0.1, "*, ", ", ")
-                )
-              ),
+              ifelse(p < 0.01,
+                     "***, ",
+                     ifelse(p < 0.05,
+                            "**, ",
+                            ifelse(p <
+                                     0.1, "*, ", ", "))),
               "Chi-sq = ",
               chi_sq,
-              ifelse(
-                chi_sq_p < 0.01,
-                "***",
-                ifelse(chi_sq_p <
+              ifelse(chi_sq_p < 0.01,
+                     "***",
+                     ifelse(
+                       chi_sq_p <
                          0.05, "**",
                        ifelse(chi_sq_p <
-                                0.1, "*", ""))
-              )
+                                0.1, "*", "")
+                     ))
             )
           )
         if (regline) {

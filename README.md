@@ -53,6 +53,15 @@ equalparts(
 
 <img src="man/figures/README-example 1-1.png" width="100%" />
 
+The note section is constructed as follows:  
+1. Pearson’s r  
+2. Lower and higher bound of 95% CI of correlation coefficient are in
+square brackets  
+3. p-value of a t-statistics that is in the brackets  
+4. Chi-squared statistics with stars indicating the p \<0.01 level of
+significance (note, in this function
+$^{***}p<0.01, ^{**}p<0.05, ^{*}p<0.1$)
+
 Plot that is returned by default can be easily changed by
 [ggplot2](https://github.com/tidyverse/ggplot2/tree/main) syntax. Just
 save function output and add to it ggplot2 blocks:
