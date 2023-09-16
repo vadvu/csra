@@ -58,7 +58,7 @@ The note section is constructed as follows:
 2. Lower and higher bound of 95% CI of correlation coefficient are in
 square brackets  
 3. p-value of a t-statistics that is in the brackets  
-4. Chi-squared statistics with stars indicating the p \<0.01 level of
+4. $\chi^2$ statistics with stars indicating the p \<0.01 level of
 significance (note, in this function
 $^{***}p<0.01,^{**}p<0.05,^{*}p<0.1$)
 
@@ -142,9 +142,9 @@ between Freq_1 and means is the basic plot that is pictured earlier).
 7. prc5 - 5 percentile value of independent interval of equal part.  
 8. prc95 - 95 percentile value of independent interval of equal part.  
 9. low95CI - lower Wald 95% interval (2.5%). Wald CI are:  
-$$\pi \pm z_{a/2}\times \sqrt{\frac{\pi\times(1-\pi)}{n}}$$  
-where $\pi$ is an estimated probability, and $z_{a/2} = 1.96$ due to 95%
-CI.  
+$$\hat{\pi} \pm z_{a/2}\times \sqrt{\frac{\hat{\pi}\times(1-\hat{\pi})}{n}}$$  
+where $\hat{\pi}$ is an estimated probability, and $z_{a/2} = 1.96$ due
+to 95% CI.  
 10. high95CI - higher Wald 95% interval (97.5%).
 
 ## Example 2: `U_shape_test()`
