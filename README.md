@@ -22,24 +22,20 @@ devtools::install_github("vadvu/csra")
 
 ## Example 1: `equalparts()`
 
-This is a basic example which shows you how the main function
+This is a basic example that shows you how the main function
 `equalparts()` works:
 
 ``` r
 library(csra)
-#> Warning: заменяю предыдущий импорт 'dplyr::filter' на 'stats::filter' во время
-#> загрузки 'csra'
-#> Warning: заменяю предыдущий импорт 'dplyr::lag' на 'stats::lag' во время
-#> загрузки 'csra'
-data <- data("dataex") #it's an example panel data that you can use
+data <- data("dataex") #it's an example panel "long" data that you can use
 
 #Now let's try to analyze how VDEM democracy index affects revolutionary situations
 equalparts(
   data = datex, #our data
   independent = 'VDEM_v2x_polyarchy', #independent var
-  lag_independent = T, #Should it be lagged? Yea because political regime can change gramatically during revolutionary year
-  lag_code = "iso3", #by what unit lag is realized
-  lead = T, #due to specific of data (in the top we have earlier data - 2019, 2018, 2017, ...) lead should be used. Otherwise, False is needed
+  lag_independent = T, #Should it be lagged? Yes, because political regime can change dramatically during revolutionary year
+  lag_code = "iso3", #by what unit lag is realized (object from country-year, in our case it is iso3 code)
+  lead = T, #due to data specific in the top we have earlier data - 2019, 2018, 2017, ..., so `lead` should be used. Otherwise, False is needed
   dependent = 'NVC_1.3_NONVIOL', #dependent var
   n = 6, #number of equal parts. If n = 10, it is decile analysis, 4 - quartile analysis and etc
   bar_or_scatter = 'scatter', #plot type, scatter is more powerful
