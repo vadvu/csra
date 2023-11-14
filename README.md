@@ -20,13 +20,14 @@ You can install the development version of csra from
 devtools::install_github("vadvu/csra")
 ```
 
-## Some R for CSRA students/intern
+## Some R for CSRA students/interns
 
 1.  Rstudio
     [Cheatsheet](https://ucdavis-bioinformatics-training.github.io/Oct2017-ILRI-Workshop/Cheat_Sheets/rstudio-IDE-cheatsheet.pdf).  
 2.  Good practical books/resources on statistics in R:
     [1](https://book.stat420.org/),
-    [2](https://stats.oarc.ucla.edu/other/dae/),[3](https://methodenlehre.github.io/intro-to-rstats/index.html).  
+    [2](https://stats.oarc.ucla.edu/other/dae/),
+    [3](https://methodenlehre.github.io/intro-to-rstats/index.html).  
 3.  Visualization in R:
     [1](https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html),
     [2](https://r-coder.com/r-graphs/),
@@ -34,8 +35,8 @@ devtools::install_github("vadvu/csra")
 
 ## Example 1: `equalparts()`
 
-This is a basic example that shows you how the main function
-`equalparts()` works:
+This is a basic example that shows you how the main (and really
+powerful) function `equalparts()` works:
 
 ``` r
 library(csra)
@@ -62,13 +63,13 @@ equalparts(
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 The note section is constructed as follows:  
-1. Pearson’s r  
+1. Pearson’s r (note, $Cor(X,Y) = \frac{Cov(X,Y)}{\sqrt{D(X)D(Y)}}$)  
 2. Lower and higher bound of 95% CI of correlation coefficient are in
 square brackets  
-3. p-value of a t-statistics that is in the brackets  
-4. $\chi^2$ statistics with stars indicating the $p<0.01$ level of
-significance (note, in this function \$ ^{***}p\<0.01, ^{**}p\<0.05,
-^{*}p\<0.1\$)
+3. p-value of a t-statistics that is in the brackets (so, it is
+$P(|\hat{t}|>t_{0.975}(n-1))$) 4. $\chi^2$ statistics with stars
+indicating the $p<0.01$ level of significance (note, in this function \$
+^{***}p\<0.01, ^{**}p\<0.05, ^{*}p\<0.1\$)
 
 Plot that is returned by default can be easily changed by
 [ggplot2](https://github.com/tidyverse/ggplot2/tree/main) syntax. Just
