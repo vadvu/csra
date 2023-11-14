@@ -34,6 +34,11 @@ You can install the development version of csra from [GitHub](https://github.com
 devtools::install_github("vadvu/csra")
 
 ```
+## Some R for CSRA students/intern
+1. Rstudio [Cheatsheet](https://ucdavis-bioinformatics-training.github.io/Oct2017-ILRI-Workshop/Cheat_Sheets/rstudio-IDE-cheatsheet.pdf).   
+2. Good practical books/resources on statistics in R: [1](https://book.stat420.org/), [2](https://stats.oarc.ucla.edu/other/dae/),[3](https://methodenlehre.github.io/intro-to-rstats/index.html).    
+3. Visualization in R: [1](https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html), [2](https://r-coder.com/r-graphs/), [3](https://r-statistics.co/ggplot2-Tutorial-With-R.html).    
+
 
 ## Example 1: `equalparts()`
 
