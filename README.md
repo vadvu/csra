@@ -63,7 +63,8 @@ equalparts(
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 The note section is constructed as follows:  
-1. Pearson’s r (note, $Cor(X,Y) = \frac{Cov(X,Y)}{\sqrt{D(X)D(Y)}}$)  
+1. Pearson’s r (note, $Cor(X,Y) = \frac{Cov(X,Y)}{\sqrt{D(X)D(Y)}}$ that
+measures ***linear*** association)  
 2. Lower and higher bound of 95% CI of correlation coefficient are in
 square brackets  
 3. p-value of a t-statistics that is in the brackets (so, it is
