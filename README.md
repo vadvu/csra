@@ -68,9 +68,10 @@ measures ***linear*** association)
 2. Lower and higher bound of 95% CI of correlation coefficient are in
 square brackets  
 3. p-value of a t-statistics that is in the brackets (so, it is
-$P(|\hat{t}|>t_{0.975}(n-1))$) 4. $\chi^2$ statistics with stars
-indicating the $p<0.01$ level of significance (note, in this function \$
-^{***}p\<0.01, ^{**}p\<0.05, ^{*}p\<0.1\$)
+$P(|\hat{t}|>t_{0.975}(n-1))$ ).  
+4. $\chi^2$ statistics with stars indicating the $p<0.01$ level of
+significance (note, in this function \$ ^{***}p\<0.01, ^{**}p\<0.05,
+^{*}p\<0.1 \$)
 
 Plot that is returned by default can be easily changed by
 [ggplot2](https://github.com/tidyverse/ggplot2/tree/main) syntax. Just
