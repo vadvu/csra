@@ -2,6 +2,7 @@
 
 export(U_shape_test)
 export(equalparts)
+export(goldclass)
 import(brglm2)
 import(confintr)
 import(doParallel)

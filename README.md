@@ -1,3 +1,11 @@
+Using csra package
+================
+
+- [csra](#csra)
+  - [Installation](#installation)
+  - [Some R for CSRA students/interns](#some-r-for-csra-studentsinterns)
+  - [Example 1: `equalparts()`](#example-1-equalparts)
+  - [Example 2: `U_shape_test()`](#example-2-u_shape_test)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -27,11 +35,16 @@ devtools::install_github("vadvu/csra")
 2.  Good practical books/resources on statistics in R:
     [1](https://book.stat420.org/),
     [2](https://stats.oarc.ucla.edu/other/dae/),
-    [3](https://methodenlehre.github.io/intro-to-rstats/index.html).  
+    [3](https://methodenlehre.github.io/intro-to-rstats/index.html),
+    [4](https://murraylax.org/rtutorials/).  
 3.  Visualization in R:
     [1](https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html),
     [2](https://r-coder.com/r-graphs/),
-    [3](https://r-statistics.co/ggplot2-Tutorial-With-R.html).
+    [3](https://r-statistics.co/ggplot2-Tutorial-With-R.html). Also note
+    extremely powerful package
+    [`sjPlot`](https://strengejacke.github.io/sjPlot/) that provides you
+    with regression tables, marginal effects, contingency tables and
+    etc.
 
 ## Example 1: `equalparts()`
 
@@ -39,6 +52,7 @@ This is a basic example that shows you how the main (and really
 powerful) function `equalparts()` works:
 
 ``` r
+
 library(csra)
 data <- data("dataex") #it's an example panel "long" data that you can use
 
@@ -143,20 +157,26 @@ equalparts(
 ```
 
 The columns in the table are:  
-1. parts - equal subsample. In our case - sixtiles.  
-2. Freq_0 - number of observations with “0” values.  
-3. Freq_1 - number of observations with “1” values.  
-4. means - mean of independent interval of equal part (scatter plot
-between Freq_1 and means is the basic plot that is pictured earlier).  
-5. min - min value of independent interval of equal part.  
-6. max - max value of independent interval of equal part.  
-7. prc5 - 5 percentile value of independent interval of equal part.  
-8. prc95 - 95 percentile value of independent interval of equal part.  
-9. low95CI - lower Wald 95% interval (2.5%). Wald CI are:  
+1. `parts` - equal subsample. In our case - sixtiles.  
+2. `Freq_0` - number of observations with “0” values.  
+3. `Freq_1` - number of observations with “1” values.  
+4. `means` - mean of independent variable in specific interval (equal
+part).  
+(scatter plot between `Freq_1` and `means` is the basic plot that is
+pictured earlier).  
+5. `min` - min value of independent variable in specific interval (equal
+part).  
+6. `max` - max value of independent variable in specific interval (equal
+part).  
+7. `prc5` - 5 percentile value of independent variable in specific
+interval (equal part).  
+8. `prc95` - 95 percentile value of independent variable in specific
+interval (equal part).  
+9. `low95CI` - lower Wald 95% interval (2.5%). Wald CI are:  
 $$\hat{\pi} \pm z_{a/2}\times \sqrt{\frac{\hat{\pi}\times(1-\hat{\pi})}{n}}$$  
 where $\hat{\pi}$ is an estimated probability, and $z_{a/2} = 1.96$ due
 to 95% CI.  
-10. high95CI - higher Wald 95% interval (97.5%).
+10. `high95CI` - higher Wald 95% interval (97.5%).
 
 ## Example 2: `U_shape_test()`
 
@@ -320,3 +340,24 @@ U_shape_test(
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+
+\##Some additional functions \###Goldstone regime type classification
+
+Goldstone et
+al. ([2010](https://doi.org/10.1111/j.1540-5907.2009.00426.x)) proposed
+new regime type classification that is based on Polity-V project. This
+approach distinguishes five types of political regimes based on two
+indicators of the Polity database – EXREC (Executive Recruitment) and
+PARCOMP (Competitiveness of Political Participation). Function
+`goldclass` provide you with ability to recode Polity-V data into
+5-class variable:  
+1. full autocracy  
+2. partial autocracy  
+3. partial democracy  
+4. partial democracy with factionalism  
+5. full democracy
+
+``` r
+
+polity5data$goldstone_regime <- goldclass(exrec = polity5data$exrec, parcomp = polity5data$parcomp)
+```
