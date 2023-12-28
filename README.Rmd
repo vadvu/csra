@@ -203,8 +203,8 @@ U_shape_test(
 ```
 
 
-##Some additional functions
-###Goldstone regime type classification
+## Some additional functions
+### Goldstone regime type classification
 
 Goldstone et al. ([2010]( https://doi.org/10.1111/j.1540-5907.2009.00426.x)) proposed new regime type classification that is based on Polity-V project. This approach distinguishes five types of political regimes based on two indicators of the Polity database – EXREC (Executive Recruitment) and PARCOMP (Competitiveness of Political Participation). Function `goldclass` provide you with ability to recode Polity-V data into 5-class variable:    
 1. full autocracy   

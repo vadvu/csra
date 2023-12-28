@@ -6,6 +6,9 @@ Using csra package
   - [Some R for CSRA students/interns](#some-r-for-csra-studentsinterns)
   - [Example 1: `equalparts()`](#example-1-equalparts)
   - [Example 2: `U_shape_test()`](#example-2-u_shape_test)
+  - [Some additional functions](#some-additional-functions)
+    - [Goldstone regime type
+      classification](#goldstone-regime-type-classification)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -341,7 +344,9 @@ U_shape_test(
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
-\##Some additional functions \###Goldstone regime type classification
+## Some additional functions
+
+### Goldstone regime type classification
 
 Goldstone et
 al. ([2010](https://doi.org/10.1111/j.1540-5907.2009.00426.x)) proposed
