@@ -270,76 +270,43 @@ data("datex")
 
 U_shape_test(
   data = datex, #our data
-  dep_var = "NVC_1.3_NONVIOL", #dependent variable
-  ind_var = "VDEM_v2x_polyarchy_lag", #independent var
-  control_vars = c("UN_Median_Age", "UN_Total_Population_log"), #control vars
-  boot = FALSE, #bootstrap for middle point analysis. Is not used in the example
-  vcov_type = "HC", #type of SE
-  save_plot = FALSE, #we do not need to save plot
-  save_table = FALSE #we do not need to save regression table
+  dep = "NVC_1.3_NONVIOL", #dependent variable
+  ind = "VDEM_v2x_polyarchy_lag", #independent var
+  cnt = c("UN_Median_Age", "UN_Total_Population_log"), #control vars
+  boot = "nonparam", #bootstrap for middle point analysis
+  n = 1000, #number of bootstrap deaws
+  const = T, #We need constan in a model
+  HC = T, #type of SE
+  plot = T,
+  tab_save = FALSE #we do not need to save regression table
 )
-#> [1] "data looks ok"
-#> [1] "GAM vs polynomial term p-value: 1"
-#> [1] "ggpredict"
 #> 
-#> ========================================================
-#>                                 Dependent variable:     
-#>                            -----------------------------
-#>                                                         
-#> --------------------------------------------------------
-#> VDEM_v2x_polyarchy_lag               8.544***           
-#>                                       (1.329)           
-#> I(VDEM_v2x_polyarchy_lag2)          -10.989***          
-#>                                       (1.462)           
-#> UN_Median_Age                        0.044***           
-#>                                       (0.011)           
-#> UN_Total_Population_log              0.351***           
-#>                                       (0.045)           
-#> Constant                             -8.941***          
-#>                                       (0.519)           
-#> --------------------------------------------------------
-#> U-shape test:                                           
-#> ....Extreme point                      0.389            
-#> ....Slope at Xlower                   2.62***           
-#> ....Slope at Xhigher                 -5.62***           
-#> GAM test:                                               
-#> ....GAM edf                           3.16***           
-#> ....ANOVA p-value                        1              
-#> Nobs                                   8400             
-#> AIC                                   1768.79           
-#> ========================================================
-#> Note:                      *p<0.05; **p<0.01; ***p<0.001
-#> [[1]]
-#>  [1] ""                                                        
-#>  [2] "========================================================"
-#>  [3] "                                Dependent variable:     "
-#>  [4] "                           -----------------------------"
-#>  [5] "                                                        "
-#>  [6] "--------------------------------------------------------"
-#>  [7] "VDEM_v2x_polyarchy_lag               8.544***           "
-#>  [8] "                                      (1.329)           "
-#>  [9] "I(VDEM_v2x_polyarchy_lag2)          -10.989***          "
-#> [10] "                                      (1.462)           "
-#> [11] "UN_Median_Age                        0.044***           "
-#> [12] "                                      (0.011)           "
-#> [13] "UN_Total_Population_log              0.351***           "
-#> [14] "                                      (0.045)           "
-#> [15] "Constant                             -8.941***          "
-#> [16] "                                      (0.519)           "
-#> [17] "--------------------------------------------------------"
-#> [18] "U-shape test:                                           "
-#> [19] "....Extreme point                      0.389            "
-#> [20] "....Slope at Xlower                   2.62***           "
-#> [21] "....Slope at Xhigher                 -5.62***           "
-#> [22] "GAM test:                                               "
-#> [23] "....GAM edf                           3.16***           "
-#> [24] "....ANOVA p-value                        1              "
-#> [25] "Nobs                                   8400             "
-#> [26] "AIC                                   1768.79           "
-#> [27] "========================================================"
-#> [28] "Note:                      *p<0.05; **p<0.01; ***p<0.001"
-#> 
-#> [[2]]
+#> ======================================================
+#>                                Dependent variable:    
+#>                            ---------------------------
+#>                                                       
+#> ------------------------------------------------------
+#> VDEM_v2x_polyarchy_lag              8.544***          
+#>                                      (1.328)          
+#> I(VDEM_v2x_polyarchy_lag2)         -10.989***         
+#>                                      (1.461)          
+#> UN_Median_Age                       0.044***          
+#>                                      (0.011)          
+#> UN_Total_Population_log             0.351***          
+#>                                      (0.045)          
+#> Constant                            -8.941***         
+#>                                      (0.519)          
+#> ------------------------------------------------------
+#> N                                     8400            
+#> AIC                                  1768.79          
+#> U-shape test:                                         
+#> Extremum                        0.39 [0.35-0.41]      
+#> Xlower                           2.83 [1.12-4.1]      
+#> Xhigher                       -5.42 [-7.13-(-4.06)]   
+#> GAM edf                           3.16 (p = 0)        
+#> AIC glm - AIC gam                     -2.84           
+#> ======================================================
+#> Note:                      *p<0.1; **p<0.05; ***p<0.01
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

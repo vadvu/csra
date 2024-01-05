@@ -1,470 +1,238 @@
-#'U-shape test for rare events logistic regression
+#' U-shape test for rare events logistic regression
 #'
-#'@param data Dataframe
-#'@param dep_var Character. Dependent variable.
-#'@param ind_var Character. Independent variable.
-#'@param control_vars Vector of characters with names of control variables.
-#'@param vcov_type Character. Type from lmtest::coeftest.
-#'@param boot Logical. Should middle point CI be calculated via bootstrap?
-#'@param n Int. Number of bootstraps.
-#'@param save_plot Logical. Should plot be saved.
-#'@param save_table Logical. Should regression table be saved.
-#'@return Plot and regression table with U-shape test summary.
-#'@import mgcv brglm2 lmtest tidyr sandwich stargazer doParallel foreach
-#'  ggeffects
-#' @examples
-#' data("datex")
-#' U_shape_test(data = datex,
-#' dep_var = "NVC_1.3_NONVIOL",
-#' ind_var = "VDEM_v2x_polyarchy_lag",
-#' control_vars = c("UN_Total_Population_log", "UN_Median_Age"),
-#' boot = FALSE,
-#' vcov_type = "HC",
-#' n = 1000,
-#' save_plot = FALSE, save_table = FALSE)
+#' @param data Dataframe
+#' @param dep Character. Dependent variable.
+#' @param ind Character. Independent variable.
+#' @param cnt Vector of characters with names of control variables.
+#' @param mod Character. Type of model (now just `brglm` is supported)
+#' @param boot Character. Should middle point and "lines" be calculated via bootstrap? If no - "none", if yes - one can choose bootstrap type
+#' @param factor Character. Only if `boot = T`.
+#' @param n Number of bootstrap draws
+#' @param HC Logical. Should heteroscedasticity-consistent SE be used?
+#' @param const Logical. Should constant be included in the models?
+#' @param table_remove Vector of variables names that should be excluded from the regression table.
+#' @param plot Logical. Should plot be depicted?
+#' @param tab_save Logical. Should table be saved? If yes - table is saved in working directory.
 #'
-#'@export
-U_shape_test <-
-  function(data,
-           dep_var,
-           ind_var,
-           control_vars,
-           vcov_type = "HC",
-           boot = FALSE,
-           n = 1000,
-           save_plot = FALSE,
-           save_table = FALSE) {
-    library(brglm2)
-    coef <- function(x, vcov_type = "HC") {
-      if (vcov_type == "HAC") {
-        co <-
-          round(lmtest::coeftest(x, vcov = sandwich::vcovHAC(x))[2, 1], 2)
-        p <-
-          round(lmtest::coeftest(x, vcov = sandwich::vcovHAC(x))[2, 4], 2)
-      } else{
-        co <-
-          round(lmtest::coeftest(x, vcov = sandwich::vcovHC(x, type = "HC0"))[2, 1], 2)
-        p <-
-          round(lmtest::coeftest(x, vcov = sandwich::vcovHC(x, type = "HC0"))[2, 4], 2)
-      }
-      cop <-
-        paste0(co, ifelse(p < 0.001, "***", ifelse(p < 0.01, "**", ifelse(p < 0.05, "*", ""))))
-      return(cop)
-    }
-    gam_edf <- function(x, dep_var, ind_var, control_vars, data) {
-      f <- as.formula(paste0(
-        paste0(dep_var, " ~ "),
-        paste0("s(", ind_var, ", bs = 'cr') + "),
-        paste0(control_vars, collapse = " + ")
-      ))
-
-      mod <-
-        summary(mgcv::gam(f, data = data, family = binomial(link = "logit")))
-      edf_p <- paste0(round(mod$edf, 2),
-                      ifelse(
-                        mod$s.pv < 0.001,
-                        "***",
-                        ifelse(mod$s.pv < 0.01, "**", ifelse(mod$s.pv < 0.05, "*", ""))
-                      ))
-      return(edf_p)
-    }
-    comp <- function(x, dep_var, ind_var, control_vars, data) {
-      f3 <- as.formula(paste0(
-        paste0(dep_var, " ~ "),
-        paste0("s(", ind_var, ", bs = 'cr') + "),
-        paste0(control_vars, collapse = " + ")
-      ))
-
-      mod <-
-        mgcv::gam(f3, data = data, family = binomial(link = "logit"))
-      an_p <- anova(x, mod, test = "Chisq")$`Pr(>Chi)`[2]
-      return(round(an_p, 3))
-    }
-
-    df = data %>% dplyr::select(c(dep_var, ind_var, control_vars)) %>% tidyr::drop_na()
-    df <- as.data.frame(df)
-    if (nrow(df) < 5) {
-      stop("data is too small after NA dropping (<5 n), the function is stopped")
-    } else {
-      print("data looks ok")
-    }
-
-    f <- as.formula(paste0(
-      paste0(dep_var, " ~ "),
-      paste0(ind_var, " + ", "I(", ind_var, "^2)", " + "),
-      paste0(control_vars, collapse = " + ")
-    ))
-
-    model <- glm(
-      f,
-      data = df,
-      family = binomial(link = "logit"),
-      method = "brglm_fit",
-      type = "MPL_Jeffreys"
-    )
-
-    if (vcov_type == "HAC") {
-      coef_model <-
-        lmtest::coeftest(model, vcov = sandwich::vcovHAC(model))
-    } else{
-      coef_model <-
-        lmtest::coeftest(model, vcov = sandwich::vcovHC(model, type = "HC0"))
-    }
-
-    f2 <- as.formula(paste0(
-      paste0(dep_var, " ~ "),
-      paste0(ind_var, " + "),
-      paste0(control_vars, collapse = " + ")
-    ))
-    point <-
-      round(-1 * model$coefficients[2] / (2 * model$coefficients[3]), 3)
-
-    mod_l <-
-      glm(
-        f2,
-        data = df %>% dplyr::filter(get(ind_var) <= point),
-        family = binomial(link = "logit"),
-        method = "brglm_fit",
-        type = "MPL_Jeffreys"
-      )
-    mod_h <-
-      glm(
-        f2,
-        data = df %>% dplyr::filter(get(ind_var) >= point),
-        family = binomial(link = "logit"),
-        method = "brglm_fit",
-        type = "MPL_Jeffreys"
-      )
-    anova_p = comp(model, dep_var, ind_var, control_vars, df)
-    anova_p = ifelse(is.na(anova_p), 1, anova_p)
-    print(paste0("GAM vs polynomial term p-value: ", anova_p))
-
-    for (i in control_vars) {
-      p = FALSE
-      if (is.factor(df[, i])) {
-        p = TRUE
-        break
-      } else{
-        next
-      }
-    }
-    if (p == TRUE) {
-      tryCatch(
-        expr = {
-          pred_gen <-
-            as.data.frame(
-              ggeffects::ggemmeans(
-                rg.limit = 1e10,
-                model = model,
-                terms = paste0(ind_var, " [all]"),
-                vcov.fun = "vcovHC",
-                vcov.type = "HC0",
-                ci.lvl = 0.95,
-                back.transform = FALSE
-              )
-            )
-          if (anova_p < 0.1) {
-            f3 <- as.formula(paste0(
-              paste0(dep_var, " ~ "),
-              paste0("s(", ind_var, ", bs = 'cr') + "),
-              paste0(control_vars, collapse = " + ")
-            ))
-            mod <-
-              mgcv::gam(f3, data = df, family = binomial(link = "logit"))
-            pred_add <-
-              as.data.frame(
-                ggeffects::ggemmeans(
-                  rg.limit = 1e10,
-                  model = mod,
-                  terms = paste0(ind_var, " [all]"),
-                  vcov.fun = "vcovHC",
-                  vcov.type = "HC0",
-                  ci.lvl = 0.95,
-                  back.transform = FALSE
-                )
-              )
-          }
-          type_pred = "ggemmeans"
-        },
-        error = function(e) {
-          type_pred = "ggpredict"
-        }
-      )
-    } else {
-      type_pred = "ggpredict"
-    }
-    print(type_pred)
-
-    if (anova_p < 0.1) {
-      f3 <- as.formula(paste0(
-        paste0(dep_var, " ~ "),
-        paste0("s(", ind_var, ", bs = 'cr') + "),
-        paste0(control_vars, collapse = " + ")
-      ))
-      mod <-
-        mgcv::gam(f3, data = df, family = binomial(link = "logit"))
-    }
-
-    if (type_pred == "ggpredict") {
-      pred_gen <-
-        as.data.frame(
-          ggeffects::ggpredict(
-            rg.limit = 1e10,
-            model = model,
-            terms = paste0(ind_var, " [all]"),
-            vcov.fun = "vcovHC",
-            vcov.type = "HC0",
-            ci.lvl = 0.95,
-            back.transform = FALSE
-          )
-        )
-      if (anova_p < 0.1) {
-        pred_add <-
-          as.data.frame(
-            ggeffects::ggpredict(
-              rg.limit = 1e10,
-              model = mod,
-              terms = paste0(ind_var, " [all]"),
-              vcov.fun = "vcovHC",
-              vcov.type = "HC0",
-              ci.lvl = 0.95,
-              back.transform = FALSE
-            )
-          )
-        pred_add$model = "GAM"
-        pred_gen$model = "GLM"
-        pred <- rbind(pred_add, pred_gen)
-      } else {
-        pred <- pred_gen
-      }
-      pred_low <-
-        as.data.frame(
-          ggeffects::ggpredict(
-            rg.limit = 1e10,
-            model = mod_l,
-            terms = paste0(ind_var, " [all]"),
-            vcov.fun = "vcovHC",
-            vcov.type = "HC0",
-            ci.lvl = 0.95,
-            back.transform = FALSE
-          )
-        )
-      pred_high <-
-        as.data.frame(
-          ggeffects::ggpredict(
-            rg.limit = 1e10,
-            model = mod_h,
-            terms = paste0(ind_var, " [all]"),
-            vcov.fun = "vcovHC",
-            vcov.type = "HC0",
-            ci.lvl = 0.95,
-            back.transform = FALSE
-          )
-        )
-    } else{
-      pred_gen <-
-        as.data.frame(
-          ggeffects::ggemmeans(
-            rg.limit = 1e10,
-            model = model,
-            terms = paste0(ind_var, " [all]"),
-            vcov.fun = "vcovHC",
-            vcov.type = "HC0",
-            ci.lvl = 0.95,
-            back.transform = FALSE
-          )
-        )
-      if (anova_p < 0.1) {
-        pred_add <-
-          as.data.frame(
-            ggeffects::ggemmeans(
-              rg.limit = 1e10,
-              model = mod,
-              terms = paste0(ind_var, " [all]"),
-              vcov.fun = "vcovHC",
-              vcov.type = "HC0",
-              ci.lvl = 0.95,
-              back.transform = FALSE
-            )
-          )
-        pred_add$model = "GAM"
-        pred_gen$model = "GLM"
-        pred <- rbind(pred_add, pred_gen)
-
-      } else {
-        pred <- pred_gen
-      }
-      pred_low <-
-        as.data.frame(
-          ggeffects::ggemmeans(
-            rg.limit = 1e10,
-            model = mod_l,
-            terms = paste0(ind_var, " [all]"),
-            vcov.fun = "vcovHC",
-            vcov.type = "HC0",
-            ci.lvl = 0.95,
-            back.transform = FALSE
-          )
-        )
-      pred_high <-
-        as.data.frame(
-          ggeffects::ggemmeans(
-            rg.limit = 1e10,
-            model = mod_h,
-            terms = paste0(ind_var, " [all]"),
-            vcov.fun = "vcovHC",
-            vcov.type = "HC0",
-            ci.lvl = 0.95,
-            back.transform = FALSE
-          )
-        )
-    }
-    if (anova_p < 0.1) {
-      pl <-
-        ggplot(pred, aes(x = x, y = predicted, color = model)) + geom_line(size = 1.5) +
-        theme_minimal() + geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
-                                      alpha = 0.25,
-                                      linetype = "dashed") +
-        xlab(ind_var) + ylab("Pr(y=1|X)") +
-        geom_line(
-          data = pred_low,
-          aes(x = x, y = predicted, color = "low"),
-          linetype = "dashed",
-          size = 1.2
-        ) +
-        geom_line(
-          data = pred_high,
-          aes(x = x, y = predicted, color = "high"),
-          linetype = "dashed",
-          size = 1.2
-        ) +
-        theme(text = element_text(size = 13), axis.text = element_text(size = 11))
-
-    } else {
-      pl <-
-        ggplot(pred, aes(x = x, y = predicted)) + geom_line(size = 1.5) +
-        theme_minimal() + geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
-                                      alpha = 0.25,
-                                      linetype = "dashed") +
-        xlab(ind_var) + ylab("Pr(y=1|X)") +
-        geom_line(
-          data = pred_low,
-          aes(x = x, y = predicted),
-          linetype = "dashed",
-          size = 1.2
-        ) +
-        geom_line(
-          data = pred_high,
-          aes(x = x, y = predicted),
-          linetype = "dashed",
-          size = 1.2
-        ) +
-        theme(text = element_text(size = 13), axis.text = element_text(size = 11))
-    }
-
-    if (boot == TRUE) {
-      myCluster <-
-        parallel::makeCluster(parallel::detectCores(), # number of cores to use
-                              type = "PSOCK")
-      doParallel::registerDoParallel(myCluster)
-      btr <-
-        foreach::foreach(
-          i = 1:n,
-          .combine = 'c',
-          .packages = c("brglm2")
-        ) %dopar% {
-          suppressWarnings({
-            g = glm(
-              data = df[sample(nrow(df),
-                               replace = TRUE,
-                               size = nrow(df) * 0.6),],
-              f,
-              family = binomial(),
-              method = "brglm_fit",
-              type = "MPL_Jeffreys"
-            )
-          })
-          - 1 * g$coefficients[2] / (2 * g$coefficients[3])
-
-        }
-      parallel::stopCluster(myCluster)
-      meanb = mean(btr)
-      q = quantile(btr, probs = c(0.025, 0.975))
-    }
-
-    if (save_plot) {
-      ggsave(
-        "U-shape plot",
-        pl,
-        device = "png",
-        dpi = 600,
-        units = "cm",
-        width = 20,
-        height = 10
-      )
-    }
-    if (save_table) {
-      stargazer::stargazer(
-        coef_model,
-        type = "html",
-        out = "U-shape table.html",
-        no.space = TRUE,
-        star.cutoffs = c(0.05, 0.01, 0.001),
-        add.lines	= list(
-          c("U-shape test:", ""),
-          c("....Extreme point", ifelse(
-            boot == FALSE,
-            point,
-            paste(point,
-                  "[",
-                  round(meanb - q[1], 3),
-                  "-",
-                  round(meanb + q[2], 3),
-                  "]")
-          )),
-          c("....Slope at Xlower", coef(mod_l, vcov_type = "HC")),
-          c("....Slope at Xhigher", coef(mod_h, vcov_type = "HC")),
-          c("GAM test:", ""),
-          c(
-            "....GAM edf",
-            gam_edf(model, dep_var, ind_var, control_vars, df)
-          ),
-          c("....ANOVA p-value", anova_p),
-          c("Nobs", nrow(model$model)),
-          c("AIC", round(model$aic, 2))
-        )
-      )
-    }
-
-    return(list(
-      stargazer::stargazer(
-        coef_model,
-        type = "text",
-        no.space = TRUE,
-        star.cutoffs = c(0.05, 0.01, 0.001),
-        add.lines	= list(
-          c("U-shape test:", ""),
-          c("....Extreme point", ifelse(
-            boot == FALSE, point,
-            paste(point,
-                  "[",
-                  round(meanb - q[1], 3),
-                  "-",
-                  round(meanb + q[2], 3),
-                  "]")
-          )),
-          c("....Slope at Xlower", coef(mod_l, vcov_type = "HC")),
-          c("....Slope at Xhigher", coef(mod_h, vcov_type = "HC")),
-          c("GAM test:", ""),
-          c(
-            "....GAM edf",
-            gam_edf(model, dep_var, ind_var, control_vars, df)
-          ),
-          c("....ANOVA p-value", anova_p),
-          c("Nobs", nrow(model$model)),
-          c("AIC", round(model$aic, 2))
-        )
-      ),
-      pl
-    ))
+#' @references
+#' Lind, J. T., & Mehlum, H. (2010). With or without U? The appropriate test for a U‐shaped relationship. *Oxford bulletin of economics and statistics*, *72(1)*, 109-118.
+#'
+#' Simonsohn, U. (2018). Two lines: A valid alternative to the invalid testing of U-shaped relationships with quadratic regressions. *Advances in Methods and Practices in Psychological Science*, *1(4)*, 538-555.
+#'
+#' @return Plot and regression table with u-shape test summary.
+#' @import mgcv brglm lmtest tidyr dplyr sandwich stargazer doParallel foreach ggeffects parallel ggplot2
+#' @export
+#'
+U_shape_test <- function(data, dep, ind, cnt, mod = "brglm",
+                         boot = c("none", "nonparam", "factor"),
+                         factor = NULL, n = 1000, HC = T, const = T,
+                         table_remove = NULL, plot = F, tab_save = F){
+  #checks
+  if(F %in% (c(dep, ind, cnt) %in% colnames(data))){
+    stop("Variables are not in data")
   }
+
+  #formulas
+  f2 = as.formula(
+    paste0(dep, "~",
+           ind, "+I(", ind, "^2)+",
+           paste0(cnt, collapse = "+"),
+           ifelse(const,"+1","-1"))
+  )
+
+  f1 = as.formula(
+    paste0(dep, "~",
+           ind, "+",
+           paste0(cnt, collapse = "+"),
+           ifelse(const,"+1","-1"))
+  )
+
+  fg = as.formula(
+    paste0(dep, "~",
+           "s(", ind,", bs = 'cr')", "+",
+           paste0(cnt, collapse = "+"),
+           ifelse(const,"+1","-1"))
+  )
+
+  #main model
+  suppressWarnings({
+    main.mod = brglm::brglm(data = data, f2, family = binomial(), method = "brglm.fit", pl = T)
+  })
+
+  #HC main
+  if(HC){
+    main.mod1 <- lmtest::coeftest(main.mod, vcov = sandwich::vcovHC(main.mod, type = "HC1"))
+  }else{
+    main.mod1 <- lmtest::coeftest(main.mod)
+  }
+
+  #ex boot
+  if (boot == "none"){
+    ext = main.mod$coefficients[ind]/(-2*main.mod$coefficients[paste0("I(",ind,"^2)")])
+
+    suppressWarnings({
+      low = brglm(data = dplyr::filter(data, get(ind) <= ext), f1, family = binomial(), method = "brglm.fit", pl = T)
+      high = brglm(data = dplyr::filter(data, get(ind) >= ext), f1, family = binomial(), method = "brglm.fit", pl = T)
+    })
+
+    if(HC){
+      low = lmtest::coeftest(low, vcov = sandwich::vcovHC(low, type = "HC1"))
+      low = paste0(round(low[ind,1],2)," (p = ", round(low[ind,4],4) , ")")
+      high = lmtest::coeftest(high, vcov = sandwich::vcovHC(high, type = "HC1"))
+      high = paste0(round(high[ind,1],2)," (p = ", round(high[ind,4],4) , ")")
+    }else{
+      low = summary(low)$coefficients
+      low = paste0(round(low[ind,1],2)," (p = ", round(low[ind,4],4) , ")")
+      high = summary(high)$coefficients
+      high = paste0(round(high[ind,1],2)," (p = ", round(high[ind,4],4) , ")")
+    }
+
+    ext = round(ext,2)
+
+  }else if (boot == "nonparam"){
+
+    myCluster <- parallel::makeCluster(parallel::detectCores(), type = "PSOCK")
+    doParallel::registerDoParallel(myCluster)
+
+    btr <- foreach::foreach(i = 1:n,
+                            .combine = 'rbind',
+                            .packages = c("brglm", "tidyr", "dplyr"),
+                            .errorhandling = "remove") %dopar% {
+                              dd <- data %>% tidyr::drop_na(c(ind, dep, cnt))
+                              dd = dd[sample(1:nrow(dd), size=nrow(dd), replace=T),]
+
+                              iglm = brglm::brglm(data = dd, f2,
+                                           family = binomial(link = "logit"),  method = "brglm.fit", pl = T)
+
+                              ex <- iglm$coefficients[ind]/(-2*iglm$coefficients[paste0("I(",ind,"^2)")])
+
+                              iglm = brglm::brglm(data = dplyr::filter(dd, get(ind) <= ex), f1,
+                                           family = binomial(link = "logit"),  method = "brglm.fit", pl = T)
+                              low = iglm$coefficients[ind]
+
+                              iglm = brglm::brglm(data = dplyr::filter(dd, get(ind) >= ex), f1,
+                                           family = binomial(link = "logit"),  method = "brglm.fit", pl = T)
+                              high = iglm$coefficients[ind]
+
+                              matrix(c(ex,low,high), nrow = 1)
+                            }
+
+    ext = round(quantile(btr[,1], c(0.025, 0.5, 0.925), na.rm = T), 2)
+    ext = paste0(ext[2], " [",ext[1],"-",ext[3], "]")
+
+    low = round(quantile(btr[,2], c(0.025, 0.5, 0.925), na.rm = T), 2)
+    low = paste0(low[2], " [",low[1],"-",ifelse(low[3]<0, paste0("(", low[3], ")"), low[3]), "]")
+
+    high = round(quantile(btr[,3], c(0.025, 0.5, 0.925), na.rm = T), 2)
+    high = paste0(high[2], " [",high[1],"-", ifelse(high[3]<0, paste0("(", high[3], ")"), high[3]), "]")
+  } else if (boot == "factor"){
+
+    myCluster <- parallel::makeCluster(parallel::detectCores(), type = "PSOCK")
+    doParallel::registerDoParallel(myCluster)
+
+    btr <- foreach::foreach(i = unique(data[[factor]]),
+                            .combine = 'rbind',
+                            .packages = c("brglm", "tidyr", "dplyr"),
+                            .errorhandling = "remove") %dopar% {
+                              dd <- data %>% tidyr::drop_na(c(ind, dep, cnt)) %>% dplyr::filter(get(factor) != i)
+
+                              iglm = brglm::brglm(data = dd, f2,
+                                           family = binomial(link = "logit"),  method = "brglm.fit", pl = T)
+
+                              ex <- iglm$coefficients[ind]/(-2*iglm$coefficients[paste0("I(",ind,"^2)")])
+
+                              iglm = brglm::brglm(data = dplyr::filter(dd, get(ind) <= ex), f1,
+                                           family = binomial(link = "logit"),  method = "brglm.fit", pl = T)
+                              low = iglm$coefficients[ind]
+
+                              iglm = brglm::brglm(data = dplyr::filter(dd, get(ind) >= ex), f1,
+                                           family = binomial(link = "logit"),  method = "brglm.fit", pl = T)
+                              high = iglm$coefficients[ind]
+
+                              matrix(c(ex,low,high), nrow = 1)
+                            }
+
+
+
+    ext = round(quantile(btr[,1], c(0.025, 0.5, 0.925), na.rm = T), 2)
+    ext = paste0(ext[2], " [",ext[1],"-",ext[3], "]")
+
+    low = round(quantile(btr[,2], c(0.025, 0.5, 0.925), na.rm = T), 2)
+    low = paste0(low[2], " [",low[1],"-",ifelse(low[3]<0, paste0("(", low[3], ")"), low[3]), "]")
+
+    high = round(quantile(btr[,3], c(0.025, 0.5, 0.925), na.rm = T), 2)
+    high = paste0(high[2], " [",high[1],"-", ifelse(high[3]<0, paste0("(", high[3], ")"), high[3]), "]")
+
+  }
+
+  #gam
+  suppressWarnings({
+    gam.mod <- mgcv::gam(data = data, fg, family = binomial())
+  })
+  edf = summary(gam.mod)$s.table[,c(1,4)]
+  edf = paste0(round(edf[1],2), " (p = ", round(edf[2],4), ")")
+
+  #mod comparison
+  diff_aic = AIC(main.mod)-AIC(gam.mod)
+  #anova = anova(main.mod, gam.mod)
+
+  #table
+  stargazer::stargazer(type = "text",
+                       main.mod1, no.space = T,
+                       add.lines = list(
+                         c("N", nobs(main.mod1)),
+                         c("AIC", round(AIC(main.mod1),2)),
+                         c("U-shape test:",""),
+                         c("Extremum", ext),
+                         c("Xlower", low),
+                         c("Xhigher", high),
+                         c("GAM edf", edf),
+                         c("AIC glm - AIC gam", round(diff_aic,2))
+                       ),
+                       omit = table_remove)
+
+  if(tab_save == T){
+    checkname = T
+    i=0
+    while(checkname){
+      name = paste0("out_", Sys.Date(),"_",i+1, ".html")
+      checkname = name %in% list.files()
+      i = i+1
+    }
+
+    stargazer::stargazer(type = "html",
+                         main.mod1, no.space = T,
+                         add.lines = list(
+                           c("N", nobs(main.mod1)),
+                           c("AIC", round(AIC(main.mod1),2)),
+                           c("U-shape test:",""),
+                           c("Extremum", ext),
+                           c("Xlower", low),
+                           c("Xhigher", high),
+                           c("GAM edf", edf),
+                           c("AIC glm - AIC gam", round(diff_aic,2))
+                         ),
+                         omit = table_remove, out = name)
+  }
+
+  #plots
+  if (plot){
+    plot.df = as.data.frame(ggeffects::ggemmeans(main.mod, terms = ind,
+                                                 vcov_fun = "vcovHC", vcov_type = "HC1",
+                                                 rg.limit = 10e6))
+    plot.df$group = "glm with polynomial term"
+
+    plot.df.gam = as.data.frame(ggeffects::ggemmeans(gam.mod, terms = ind,
+                                                     vcov_fun = "vcovHC", vcov_type = "HC1",
+                                                     rg.limit = 10e6))
+    plot.df.gam$group = "gam with smoothed term"
+
+    plot.df <- rbind(plot.df, plot.df.gam)
+
+    ggplot(plot.df, aes(x, predicted, color = group))+
+      geom_line(size = 1.3)+
+      geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.1, size = 0.1)+
+      theme_classic()+
+      labs(y = dep, x = ind, color = "Model:")
+  }
+}

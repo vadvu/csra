@@ -192,13 +192,15 @@ data("datex")
 
 U_shape_test(
   data = datex, #our data
-  dep_var = "NVC_1.3_NONVIOL", #dependent variable
-  ind_var = "VDEM_v2x_polyarchy_lag", #independent var
-  control_vars = c("UN_Median_Age", "UN_Total_Population_log"), #control vars
-  boot = FALSE, #bootstrap for middle point analysis. Is not used in the example
-  vcov_type = "HC", #type of SE
-  save_plot = FALSE, #we do not need to save plot
-  save_table = FALSE #we do not need to save regression table
+  dep = "NVC_1.3_NONVIOL", #dependent variable
+  ind = "VDEM_v2x_polyarchy_lag", #independent var
+  cnt = c("UN_Median_Age", "UN_Total_Population_log"), #control vars
+  boot = "nonparam", #bootstrap for middle point analysis
+  n = 1000, #number of bootstrap deaws
+  const = T, #We need constan in a model
+  HC = T, #type of SE
+  plot = T,
+  tab_save = FALSE #we do not need to save regression table
 )
 ```
 

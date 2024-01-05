@@ -6,50 +6,50 @@
 \usage{
 U_shape_test(
   data,
-  dep_var,
-  ind_var,
-  control_vars,
-  vcov_type = "HC",
-  boot = FALSE,
+  dep,
+  ind,
+  cnt,
+  mod = "brglm",
+  boot = c("none", "nonparam", "factor"),
+  factor = NULL,
   n = 1000,
-  save_plot = FALSE,
-  save_table = FALSE
+  HC = T,
+  const = T,
+  table_remove = NULL,
+  plot = F,
+  tab_save = F
 )
 }
 \arguments{
 \item{data}{Dataframe}
 
-\item{dep_var}{Character. Dependent variable.}
+\item{dep}{Character. Dependent variable.}
 
-\item{ind_var}{Character. Independent variable.}
+\item{ind}{Character. Independent variable.}
 
-\item{control_vars}{Vector of characters with names of control variables.}
+\item{cnt}{Vector of characters with names of control variables.}
 
-\item{vcov_type}{Character. Type from lmtest::coeftest.}
+\item{mod}{Character. Type of model (now just \code{brglm} is supported)}
 
-\item{boot}{Logical. Should middle point CI be calculated via bootstrap?}
+\item{boot}{Character. Should middle point and "lines" be calculated via bootstrap? If no - "none", if yes - one can choose bootstrap type}
 
-\item{n}{Int. Number of bootstraps.}
+\item{factor}{Character. Only if \code{boot = T}.}
 
-\item{save_plot}{Logical. Should plot be saved.}
+\item{n}{Number of bootstrap draws}
 
-\item{save_table}{Logical. Should regression table be saved.}
+\item{HC}{Logical. Should heteroscedasticity-consistent SE be used?}
+
+\item{const}{Logical. Should constant be included in the models?}
+
+\item{table_remove}{Vector of variables names that should be excluded from the regression table.}
+
+\item{plot}{Logical. Should plot be depicted?}
+
+\item{tab_save}{Logical. Should table be saved? If yes - table is saved in working directory.}
 }
 \value{
-Plot and regression table with U-shape test summary.
+Plot and regression table with u-shape test summary.
 }
 \description{
 U-shape test for rare events logistic regression
-}
-\examples{
-data("datex")
-U_shape_test(data = datex,
-dep_var = "NVC_1.3_NONVIOL",
-ind_var = "VDEM_v2x_polyarchy_lag",
-control_vars = c("UN_Total_Population_log", "UN_Median_Age"),
-boot = FALSE,
-vcov_type = "HC",
-n = 1000,
-save_plot = FALSE, save_table = FALSE)
-
 }
