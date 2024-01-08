@@ -179,7 +179,7 @@ U_shape_test(
   dep = "NVC_1.3_NONVIOL", #dependent variable
   ind = "VDEM_v2x_polyarchy_lag", #independent var
   cnt = c("UN_Median_Age", "UN_Total_Population_log"), #control vars
-  boot = "nonparam", #bootstrap for middle point analysis
+  boot = "none", #bootstrap for middle point analysis - we do not use it in an example 
   n = 1000, #number of bootstrap deaws
   const = T, #We need constan in a model
   HC = T, #type of SE

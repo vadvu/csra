@@ -273,7 +273,7 @@ U_shape_test(
   dep = "NVC_1.3_NONVIOL", #dependent variable
   ind = "VDEM_v2x_polyarchy_lag", #independent var
   cnt = c("UN_Median_Age", "UN_Total_Population_log"), #control vars
-  boot = "nonparam", #bootstrap for middle point analysis
+  boot = "none", #bootstrap for middle point analysis - we do not use it in an example 
   n = 1000, #number of bootstrap deaws
   const = T, #We need constan in a model
   HC = T, #type of SE
@@ -300,9 +300,9 @@ U_shape_test(
 #> N                                     8400            
 #> AIC                                  1768.79          
 #> U-shape test:                                         
-#> Extremum                        0.39 [0.35-0.41]      
-#> Xlower                          2.83 [1.14-4.05]      
-#> Xhigher                       -5.39 [-7.03-(-4.11)]   
+#> Extremum                              0.39            
+#> Xlower                          2.49 (p = 0.0065)     
+#> Xhigher                           -5.62 (p = 0)       
 #> GAM edf                           3.16 (p = 0)        
 #> AIC glm - AIC gam                     -2.84           
 #> ======================================================
