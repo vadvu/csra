@@ -6,7 +6,7 @@
 #' @param cnt Vector of characters with names of control variables.
 #' @param mod Character. Type of model (now just `brglm` is supported)
 #' @param boot Character. Should middle point and "lines" be calculated via bootstrap? If no - "none", if yes - one can choose bootstrap type
-#' @param factor Character. Only if `boot = T`.
+#' @param factor Character. Only if `boot = "factor"`.
 #' @param n Number of bootstrap draws
 #' @param HC Logical. Should heteroscedasticity-consistent SE be used?
 #' @param const Logical. Should constant be included in the models?
@@ -15,6 +15,7 @@
 #' @param tab_save Logical. Should table be saved? If yes - table is saved in working directory.
 #'
 #' @references
+#'
 #' Lind, J. T., & Mehlum, H. (2010). With or without U? The appropriate test for a U‐shaped relationship. *Oxford bulletin of economics and statistics*, *72(1)*, 109-118.
 #'
 #' Simonsohn, U. (2018). Two lines: A valid alternative to the invalid testing of U-shaped relationships with quadratic regressions. *Advances in Methods and Practices in Psychological Science*, *1(4)*, 538-555.
@@ -152,7 +153,7 @@ U_shape_test <- function(data, dep, ind, cnt, mod = "brglm",
                               matrix(c(ex,low,high), nrow = 1)
                             }
 
-
+    parallel::stopCluster(myCluster)
 
     ext = round(quantile(btr[,1], c(0.025, 0.5, 0.925), na.rm = T), 2)
     ext = paste0(ext[2], " [",ext[1],"-",ext[3], "]")

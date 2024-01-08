@@ -33,7 +33,7 @@ U_shape_test(
 
 \item{boot}{Character. Should middle point and "lines" be calculated via bootstrap? If no - "none", if yes - one can choose bootstrap type}
 
-\item{factor}{Character. Only if \code{boot = T}.}
+\item{factor}{Character. Only if \code{boot = "factor"}.}
 
 \item{n}{Number of bootstrap draws}
 
@@ -52,4 +52,9 @@ Plot and regression table with u-shape test summary.
 }
 \description{
 U-shape test for rare events logistic regression
+}
+\references{
+Lind, J. T., & Mehlum, H. (2010). With or without U? The appropriate test for a U‐shaped relationship. \emph{Oxford bulletin of economics and statistics}, \emph{72(1)}, 109-118.
+
+Simonsohn, U. (2018). Two lines: A valid alternative to the invalid testing of U-shaped relationships with quadratic regressions. \emph{Advances in Methods and Practices in Psychological Science}, \emph{1(4)}, 538-555.
 }

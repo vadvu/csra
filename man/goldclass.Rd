@@ -27,5 +27,5 @@ polity5data$goldstone_regime <- goldclass(exrec = polity5data$exrec, parcomp = p
 
 }
 \references{
-Goldstone, J.A., Bates, R.H., Epstein, D.L., Gurr, T.R., Lustik, M.B., Marshall, M.G., Ulfelder, J., Woodward, M., 2010. A Global Model for Forecasting Political Instability. American Journal of Political Science 54, 190–208.
+Goldstone, J.A., Bates, R.H., Epstein, D.L., Gurr, T.R., Lustik, M.B., Marshall, M.G., Ulfelder, J. & Woodward, M. (2010). A Global Model for Forecasting Political Instability. \emph{American Journal of Political Science}, \emph{54}, 190–208.
 }
