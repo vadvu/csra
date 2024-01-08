@@ -1,5 +1,5 @@
 ---
-title: "demor"
+title: "Get started with csra"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{demor}
