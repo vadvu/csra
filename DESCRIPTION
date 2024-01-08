@@ -26,7 +26,8 @@ Imports:
     magrittr,
     brglm,
     parallel,
-    confintr
+    confintr,
+    emmeans
 Depends: 
     R (>= 2.10)
 LazyData: true

@@ -21,7 +21,7 @@
 #' Simonsohn, U. (2018). Two lines: A valid alternative to the invalid testing of U-shaped relationships with quadratic regressions. *Advances in Methods and Practices in Psychological Science*, *1(4)*, 538-555.
 #'
 #' @return Plot and regression table with u-shape test summary.
-#' @import mgcv brglm lmtest tidyr dplyr sandwich stargazer doParallel foreach ggeffects parallel ggplot2
+#' @import mgcv brglm lmtest tidyr dplyr sandwich stargazer doParallel foreach ggeffects parallel ggplot2 emmeans
 #' @export
 #'
 U_shape_test <- function(data, dep, ind, cnt, mod = "brglm",
