@@ -1,19 +1,15 @@
-Using csra package
+csra
 ================
 
-- [csra](#csra)
-  - [Installation](#installation)
-  - [Some R for CSRA students/interns](#some-r-for-csra-studentsinterns)
-  - [Example 1: `equalparts()`](#example-1-equalparts)
-  - [Example 2: `U_shape_test()`](#example-2-u_shape_test)
-  - [Some additional functions](#some-additional-functions)
-    - [Goldstone regime type
-      classification](#goldstone-regime-type-classification)
+- [Installation](#installation)
+- [Some R for CSRA students/interns](#some-r-for-csra-studentsinterns)
+- [Example 1: `equalparts()`](#example-1-equalparts)
+- [Example 2: `U_shape_test()`](#example-2-u_shape_test)
+- [Some additional functions](#some-additional-functions)
+  - [Goldstone regime type
+    classification](#goldstone-regime-type-classification)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# csra
-
 <!-- badges: start -->
 <!-- badges: end -->
 

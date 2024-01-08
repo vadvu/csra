@@ -1,6 +1,6 @@
 
 ---
-title: "Using csra package"
+title: "csra"
 output:
   github_document:
     toc: true
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# csra
+
 
 <!-- badges: start -->
 <!-- badges: end -->
