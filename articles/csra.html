@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">csra</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,15 @@
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/student.html">Materials for CSRA students/interns</a>
+  </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -67,33 +76,13 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vadvu.github.io/csra/">csra</a></span><span class="op">)</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="some-r-for-csra-studentsinterns">Some R for CSRA students/interns<a class="anchor" aria-label="anchor" href="#some-r-for-csra-studentsinterns"></a>
-</h2>
-<ol style="list-style-type: decimal">
-<li>Rstudio <a href="https://ucdavis-bioinformatics-training.github.io/Oct2017-ILRI-Workshop/Cheat_Sheets/rstudio-IDE-cheatsheet.pdf" class="external-link">Cheatsheet</a>.<br>
-</li>
-<li>Good practical books/resources on statistics in R: <a href="https://book.stat420.org/" class="external-link">1</a>, <a href="https://stats.oarc.ucla.edu/other/dae/" class="external-link">2</a>, <a href="https://methodenlehre.github.io/intro-to-rstats/index.html" class="external-link">3</a>,
-<a href="https://murraylax.org/rtutorials/" class="external-link">4</a>.<br>
-</li>
-<li>Visualization in R: <a href="https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html" class="external-link">1</a>,
-<a href="https://r-coder.com/r-graphs/" class="external-link">2</a>, <a href="https://r-statistics.co/ggplot2-Tutorial-With-R.html" class="external-link">3</a>. Also
-note extremely powerful package <a href="https://strengejacke.github.io/sjPlot/" class="external-link"><code>sjPlot</code></a>
-that provides you with regression tables, marginal effects, contingency
-tables and etc.</li>
-</ol>
-</div>
 <div class="section level2">
 <h2 id="example-1-equalparts">Example 1: <code>equalparts()</code><a class="anchor" aria-label="anchor" href="#example-1-equalparts"></a>
 </h2>
 <p>This is a basic example that shows you how the main (and really
 powerful) function <code><a href="../reference/equalparts.html">equalparts()</a></code> works:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vadvu.github.io/csra/">csra</a></span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"dataex"</span><span class="op">)</span> <span class="co">#it's an example panel "long" data that you can use</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"dataex"</span><span class="op">)</span> <span class="co">#it's an example panel "long" data that you can use</span></span>
 <span></span>
 <span><span class="co">#Now let's try to analyze how VDEM democracy index affects revolutionary situations</span></span>
 <span><span class="fu"><a href="../reference/equalparts.html">equalparts</a></span><span class="op">(</span></span>
@@ -125,9 +114,8 @@ significance (note, in this function <span class="math inline">\(^{***}p&lt;0.01
 ^{*}p&lt;0.1\)</span> ).</p>
 <p>Plot that is returned by default can be easily changed by <a href="https://github.com/tidyverse/ggplot2/tree/main" class="external-link">ggplot2</a>
 syntax. Just save function output and add to it ggplot2 blocks:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vadvu.github.io/csra/">csra</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"datex"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/equalparts.html">equalparts</a></span><span class="op">(</span></span>
@@ -151,12 +139,8 @@ syntax. Just save function output and add to it ggplot2 blocks:</p>
 <p><img src="csra_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
 <p>Also table with results can be returned, just set
 <code>return_data = TRUE</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vadvu.github.io/csra/">csra</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"datex"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/equalparts.html">equalparts</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/equalparts.html">equalparts</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">datex</span>,</span>
 <span>  independent <span class="op">=</span> <span class="st">'VDEM_v2x_polyarchy'</span>,</span>
 <span>  lag_independent <span class="op">=</span> <span class="cn">T</span>,</span>
@@ -293,11 +277,8 @@ economics and statistics, 72(1), 109-118.<br>
 - Simonsohn, U. (2018). Two lines: A valid alternative to the invalid
 testing of U-shaped relationships with quadratic regressions. Advances
 in Methods and Practices in Psychological Science, 1(4), 538-555.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vadvu.github.io/csra/">csra</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"datex"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/U_shape_test.html">U_shape_test</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/U_shape_test.html">U_shape_test</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">datex</span>, <span class="co">#our data</span></span>
 <span>  dep <span class="op">=</span> <span class="st">"NVC_1.3_NONVIOL"</span>, <span class="co">#dependent variable</span></span>
 <span>  ind <span class="op">=</span> <span class="st">"VDEM_v2x_polyarchy_lag"</span>, <span class="co">#independent var</span></span>
@@ -356,7 +337,7 @@ Polity-V data into 5-class variable:<br>
 3. partial democracy<br>
 4. partial democracy with factionalism<br>
 5. full democracy</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">polity5data</span><span class="op">$</span><span class="va">goldstone_regime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/goldclass.html">goldclass</a></span><span class="op">(</span>exrec <span class="op">=</span> <span class="va">polity5data</span><span class="op">$</span><span class="va">exrec</span>, parcomp <span class="op">=</span> <span class="va">polity5data</span><span class="op">$</span><span class="va">parcomp</span><span class="op">)</span></span></code></pre></div>
 </div>
