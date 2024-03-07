@@ -10,3 +10,4 @@
 ^\.github$
 ^\.Rhistory$
 ^\.RData$
+^vignettes/articles$

@@ -2,7 +2,7 @@
 title: "Get started with csra"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{demor}
+  %\VignetteIndexEntry{csra}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,25 +17,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, echo=FALSE}
 library(csra)
 ```
-
-
-## Some R for CSRA students/interns
-1. Rstudio [Cheatsheet](https://ucdavis-bioinformatics-training.github.io/Oct2017-ILRI-Workshop/Cheat_Sheets/rstudio-IDE-cheatsheet.pdf).    
-2. Good practical books/resources on statistics in R: [1](https://book.stat420.org/), [2](https://stats.oarc.ucla.edu/other/dae/), [3](https://methodenlehre.github.io/intro-to-rstats/index.html), [4](https://murraylax.org/rtutorials/).    
-3. Visualization in R: [1](https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html), [2](https://r-coder.com/r-graphs/), [3](https://r-statistics.co/ggplot2-Tutorial-With-R.html). 
-Also note extremely powerful package [`sjPlot`](https://strengejacke.github.io/sjPlot/) that provides you with regression tables, marginal effects, contingency tables and etc. 
-
 
 ## Example 1: `equalparts()`
 
 This is a basic example that shows you how the main (and really powerful) function `equalparts()` works:
 
 ```{r}
-
-library(csra)
 data <- data("dataex") #it's an example panel "long" data that you can use
 
 #Now let's try to analyze how VDEM democracy index affects revolutionary situations
@@ -68,7 +58,6 @@ The note section is constructed as follows:
 Plot that is returned by default can be easily changed by [ggplot2](https://github.com/tidyverse/ggplot2/tree/main) syntax. Just save function output and add to it ggplot2 blocks: 
 
 ```{r}
-library(csra)
 library(ggplot2)
 data("datex")
 
@@ -96,10 +85,6 @@ plot + xlab("x var name") + ylab("y var name") + theme_grey()
 Also table with results can be returned, just set `return_data = TRUE`:
 
 ```{r}
-library(csra)
-library(ggplot2)
-data("datex")
-
 equalparts(
   data = datex,
   independent = 'VDEM_v2x_polyarchy',
@@ -171,9 +156,6 @@ This approach is based on 2 papers that define the overall strategy for identify
 - Simonsohn, U. (2018). Two lines: A valid alternative to the invalid testing of U-shaped relationships with quadratic regressions. Advances in Methods and Practices in Psychological Science, 1(4), 538-555.  
 
 ```{r}
-library(csra)
-data("datex")
-
 U_shape_test(
   data = datex, #our data
   dep = "NVC_1.3_NONVIOL", #dependent variable

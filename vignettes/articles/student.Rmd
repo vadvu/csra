@@ -1,0 +1,88 @@
+---
+title: "Materials for CSRA students/interns"
+output: rmarkdown::html_vignette
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+```{r setup, echo=FALSE}
+library(csra)
+```
+
+## Some R
+
+1. Rstudio [Cheatsheet](https://ucdavis-bioinformatics-training.github.io/Oct2017-ILRI-Workshop/Cheat_Sheets/rstudio-IDE-cheatsheet.pdf).    
+2. Good practical books/resources on statistics in R: [1](https://book.stat420.org/), [2](https://stats.oarc.ucla.edu/other/dae/), [3](https://methodenlehre.github.io/intro-to-rstats/index.html), [4](https://murraylax.org/rtutorials/), [5](https://evalf21.classes.andrewheiss.com/example/).    
+3. Visualization in R: [1](https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html), [2](https://r-coder.com/r-graphs/), [3](https://r-statistics.co/ggplot2-Tutorial-With-R.html). 
+
+Also note extremely powerful package [`sjPlot`](https://strengejacke.github.io/sjPlot/) that provides you with regression tables, marginal effects, contingency tables and etc. 
+
+## BASIS
+
+**Statistical inference?** It is a conclusion from sample about population based on estimates from a model. Statistical estimation types are:
+1. Interval (like confidence intervals)
+2. Point (like mean)
+
+**Why we need controls (confounders)?**
+Controls have common variance (=effect) with X (independent variable) and Y (dependent variable). To get less biased estimates for X we have to include controls, because part of common variance of X and Y are due to confounders, so by including them we "clean" common variance between X and Y from "noise" produced by other factors. If we do not do so, "omitted variable bias" and ["backdoor" problem](https://mixtape.scunning.com/03-directed_acyclical_graphs) emerge resulting in endogeneity and biased, inconsistent inference.    
+
+### Notation and basic concepts:   
+
+#### Type of values  
+1. *Natural* = $\mathbb{N}=[0,1,2..999,1000..]$\    
+2. *Integers* = $\mathbb{Z}=[..,-2,-1,0,1,2..]$\    
+3. *Rational* = $\mathbb{Q}=[-\frac{1}{99},-1,0,1, 999, \frac{999}{998}]$\     
+4. *Real* = $\mathbb{R}=[\forall values]$\  
+	
+#### Expectation $E(X)$ properties 
+1. $E(c)=c$, where  $c$ - *const*\       
+2. $E(cX)=c*E(X)$\    
+3. $E(X+Y)=E(X)+E(Y)$\    
+4. if *X* and *Y* are *independent*: $E(XY)=E(X)*E(Y)$\     
+
+#### Variance $D(X)$ properties       
+1. $D(X)=E([X-E(X)]^2)=E(X^2)-E^2(X)$\     
+2. $D(X)\geq 0$\     
+3. $D(c)=0$\    
+4. $D(cX)=c^2D(X)$\     
+5. $D(X+c)=D(X)+0$\    
+
+#### Covariance $Cov(X,Y)$ properties
+
+1. $Cov(X,Y)=E[(X-E(X))*(Y-E(Y))]=E(XY)-E(X)E(Y)$\    
+2. $Cov(X,X)=D(X)$\     
+3. $Cov(X,Y)=Cov(Y,X)$\     
+4. $Cov(X+Y,Z)=Cov(X,Z)+Cov(X,Z)$\     
+5. $Cov(X,Y+Z)=Cov(X,Y)+Cov(X,Z)$\     
+6. $Cov(cX,Y)=c*Cov(X,Y)$\     
+7. $Cov(X,c)=0$\     
+8. $Cov(X+c,Y)=Cov(X,Y)$\     
+9. $D(X \pm Y)=D(X)\pm 2Cov(X,Y)+D(Y)$\     
+10. if *X* and *Y* are *independent*: $Cov(X,Y)=0$ and $D(X \pm Y)=D(X)\pm D(Y)$\         
+
+#### Correlation $Corr(X,Y)$ properties      
+
+1. $Corr(X,Y)=\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$\     
+2. $|Corr(X,Y)|\leq 1$\    
+3. if *X* and *Y* are *independent* (linearly): $Corr(X,Y)=0$\     
+4. $Corr(X,X)=1$\     
+5. $Corr(X,Y)=1$ if and only if there exist values $a\neq 0$ and $b$ such that $Y=aX+b$\         
+6. $Corr(X+c,Y)=Corr(X,Y)$\     
+7. $Corr(X*(\pm c),Y)=\pm Corr(X,Y)$ and if $c=0:Corr(cX,Y)=0$\         
+
+## Panel data
+
+Soon
+
+
+
+
+
+
