@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   student: student.html
   csra: csra.html
-last_built: 2024-03-07T13:35Z
+last_built: 2024-03-07T13:36Z
 urls:
   reference: https://vadvu.github.io/csra/reference
   article: https://vadvu.github.io/csra/articles
