@@ -1,10 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  student: student.html
   csra: csra.html
-last_built: 2024-03-07T13:36Z
+  student: student.html
+last_built: 2024-04-23T18:56Z
 urls:
   reference: https://vadvu.github.io/csra/reference
   article: https://vadvu.github.io/csra/articles
