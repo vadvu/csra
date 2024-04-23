@@ -1,6 +1,8 @@
 ---
 title: "Materials for CSRA students/interns"
 output: rmarkdown::html_vignette
+toc: true
+toc_depth: 3
 ---
 
 ```{r, include = FALSE}
@@ -240,7 +242,7 @@ Controls have common variance (=effect) with $X$ (independent variable) and $Y$ 
 LSDV - *Least Squares Dummy Variables* model for $N$ cross-sectional/time units): 
 $$y_{i,t}=\beta_0+\gamma_1d_{1,i}+...+\gamma_{(N-1)}d_{N-1,i}+\beta_1x_{i,t}+\varepsilon_{i,t}$$
 where $d$ is a specific binary variable for modeling unit-specific intercept. If set of $d$ is countries and we want include FE for cross-sectional dimension, then $d_{i,1}$ is 1 when country is USA and 0 otherwise. Such model assumes **the same coefficients for all units** but different intercepts. Intercept $\beta_0$ - average level of $y$ in the *reference* cross-sectional/time unit. $\gamma$ - difference in intercept between reference unit and other unit. On average it is a difference in $y$ between some unit and reference category (also some unit) when all other variables being equal.   
-Error term structure: $e_{i,t} = e_i + e_t$ (*cross-sectional* variance + *time dimension* variance).   
+Error term structure: $\varepsilon_{i,t} = \varepsilon_i + \varepsilon_t$ (*cross-sectional* variance + *time dimension* variance).   
 
 **What FE models show?**    
 
