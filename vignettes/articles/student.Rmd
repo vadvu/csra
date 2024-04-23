@@ -16,45 +16,45 @@ knitr::opts_chunk$set(
 library(csra)
 ```
 
-## Some R
+# Some R
 
-1. Rstudio [Cheatsheet](https://ucdavis-bioinformatics-training.github.io/Oct2017-ILRI-Workshop/Cheat_Sheets/rstudio-IDE-cheatsheet.pdf).    
-2. Good practical books/resources on statistics in R: [1](https://book.stat420.org/), [2](https://stats.oarc.ucla.edu/other/dae/), [3](https://methodenlehre.github.io/intro-to-rstats/index.html), [4](https://murraylax.org/rtutorials/), [5](https://evalf21.classes.andrewheiss.com/example/).    
+1. Rstudio [Cheatsheet](https://ucdavis-bioinformatics-training.github.io/Oct2017-ILRI-Workshop/Cheat_Sheets/rstudio-IDE-cheatsheet.pdf).     
+2. Good practical books/resources on statistics in R: 
+  + [1](https://book.stat420.org/) - huge handbook with lots of examples and explanations 
+  + [2](https://stats.oarc.ucla.edu/other/dae/) - more practical and concise 
+  + [3](https://methodenlehre.github.io/intro-to-rstats/index.html) - *sociological* statistics 
+  + [4](https://murraylax.org/rtutorials/) - short handbook with lots of topics 
+  + [5](https://evalf21.classes.andrewheiss.com/example/) - more on causality 
+  + [5+](https://bookdown.org/mike/data_analysis/) - more theory and math under statistics  
 3. Visualization in R: [1](https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html), [2](https://r-coder.com/r-graphs/), [3](https://r-statistics.co/ggplot2-Tutorial-With-R.html). 
+4. Research Design (must read at least 1-10 chapters to understand why we use statistic): [1](https://theeffectbook.net/index.html) 
+5. [Intro](https://online.stat.psu.edu/stat462/node/207/) to logistic regression
 
 Also note extremely powerful package [`sjPlot`](https://strengejacke.github.io/sjPlot/) that provides you with regression tables, marginal effects, contingency tables and etc. 
 
-## BASIS
+# Basics
 
-**Statistical inference?** It is a conclusion from sample about population based on estimates from a model. Statistical estimation types are:
+**Statistical inference?** It is a conclusion from sample about population based on estimates from a model. Statistical estimation types are: 
+
 1. Interval (like confidence intervals)
 2. Point (like mean)
 
-**Why we need controls (confounders)?**
-Controls have common variance (=effect) with X (independent variable) and Y (dependent variable). To get less biased estimates for X we have to include controls, because part of common variance of X and Y are due to confounders, so by including them we "clean" common variance between X and Y from "noise" produced by other factors. If we do not do so, "omitted variable bias" and ["backdoor" problem](https://mixtape.scunning.com/03-directed_acyclical_graphs) emerge resulting in endogeneity and biased, inconsistent inference.    
-
-### Notation and basic concepts:   
-
-#### Type of values  
-1. *Natural* = $\mathbb{N}=[0,1,2..999,1000..]$\    
-2. *Integers* = $\mathbb{Z}=[..,-2,-1,0,1,2..]$\    
-3. *Rational* = $\mathbb{Q}=[-\frac{1}{99},-1,0,1, 999, \frac{999}{998}]$\     
-4. *Real* = $\mathbb{R}=[\forall values]$\  
+## Notation and basic concepts:   
 	
-#### Expectation $E(X)$ properties 
+### Expectation $E(X)$ properties 
 1. $E(c)=c$, where  $c$ - *const*\       
 2. $E(cX)=c*E(X)$\    
 3. $E(X+Y)=E(X)+E(Y)$\    
 4. if *X* and *Y* are *independent*: $E(XY)=E(X)*E(Y)$\     
 
-#### Variance $D(X)$ properties       
+### Variance $D(X)=Var(X)$ properties       
 1. $D(X)=E([X-E(X)]^2)=E(X^2)-E^2(X)$\     
 2. $D(X)\geq 0$\     
 3. $D(c)=0$\    
 4. $D(cX)=c^2D(X)$\     
 5. $D(X+c)=D(X)+0$\    
 
-#### Covariance $Cov(X,Y)$ properties
+### Covariance $Cov(X,Y)$ properties
 
 1. $Cov(X,Y)=E[(X-E(X))*(Y-E(Y))]=E(XY)-E(X)E(Y)$\    
 2. $Cov(X,X)=D(X)$\     
@@ -67,7 +67,7 @@ Controls have common variance (=effect) with X (independent variable) and Y (dep
 9. $D(X \pm Y)=D(X)\pm 2Cov(X,Y)+D(Y)$\     
 10. if *X* and *Y* are *independent*: $Cov(X,Y)=0$ and $D(X \pm Y)=D(X)\pm D(Y)$\         
 
-#### Correlation $Corr(X,Y)$ properties      
+### Correlation $Corr(X,Y)$ properties      
 
 1. $Corr(X,Y)=\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$\     
 2. $|Corr(X,Y)|\leq 1$\    
@@ -77,10 +77,344 @@ Controls have common variance (=effect) with X (independent variable) and Y (dep
 6. $Corr(X+c,Y)=Corr(X,Y)$\     
 7. $Corr(X*(\pm c),Y)=\pm Corr(X,Y)$ and if $c=0:Corr(cX,Y)=0$\         
 
-## Panel data
+### Covariance matrix
 
-Soon
+Assume we have matrix $X$ where $x_{ij}$ is a random variable:
+$$\begin{bmatrix}
+    x_{11} & \dots & x_{1j} \\
+    \vdots & \ddots & \vdots \\
+    x_{i1} & \dots & x_{ij} \\
+\end{bmatrix}$$
 
+The **expectation** of that matrix $E(X)$ is:
+$$\begin{bmatrix}
+    E(x_{11}) & \dots & E(x_{1j}) \\
+    \vdots & \ddots & \vdots \\
+    E(x_{i1}) & \dots & E(x_{ij}) \\
+\end{bmatrix}$$
+
+**Properties of $E(X)$ in matrix**:   
+1. if $B=[b_1, ..., b_n]^T$ is a constant-vector, then $E(B)=B$ 
+2. $E(cX)=cE(X)$, if $c$ - some constant term     
+3. $E(X+Y)=E(X)+E(Y)$, $X$ and $Y$ are random variables vectors     
+4. $E(AX)=AE(X)$ if $A$ - matrix with constant terms    
+
+The **covariance** of random vector $X=[x_1,...,x_i]^T$ is $V(X)$:
+$$V(X)=\begin{bmatrix}
+    Cov(x_1, x_1) & \dots & Cov(x_1,x_i) \\
+    \vdots & \ddots & \vdots \\
+    Cov(x_i, x_1) & \dots & Cov(x_i, x_i) \\
+\end{bmatrix}= \begin{bmatrix}
+	Var(x_1) & \dots & Cov(x_1,x_i) \\
+    \vdots & \ddots & \vdots \\
+    Cov(x_i, x_1) & \dots & Var(x_i) \\
+\end{bmatrix}$$
+It is *quadratic symmetric matrix*. 
+If $X = [X_1]$ (*one-dimensional random variable*) then $$V(X)=Cov(X_1,X_1)=Var(X_1)$$ $V(X)$ can be written for random-vector $X$ as:
+$$V(X)=E[(X-E(X))*(X-E(X))^T]$$
+
+**Properties of $V(X)$ matrix**:    
+1. $V(cX)=c^2V(X)$, where $c$ is some constant term   
+2. $V(X+B)=V(X)$ where $B$ is constant-vector     
+3. $V(AX)=AV(X)A^T$ where $A$ is a constant matrix    
+4. $Cov(cX,zX)=cV(X)z^T$    
+
+
+
+# Econometrics
+## OLS aka linear regression
+
+### Model
+
+The formula for linear regression with $k$ explanatory variables is:
+$$y_i = \beta_0+\sum_k{\beta_kx_{i,k}}+\epsilon_i$$
+We want to minimize RSS (*Residuals Sum of Squares*) that is deviations of our modeled (predicted) values of $y$ with a hat ($\hat y$) from observed (real) values of $y$. Note, $\hat y=\beta_0+\sum_k{\beta_kx_{i,k}}$, so we can write *RSS* as: 
+$$RSS=\sum_i{(y_i-b_1x_{i,1}-...b_kx_{i,k}})^2$$
+or
+$$RSS=\sum_i{(y_i-\hat y_i)^2}$$
+Minimization of that sum (the quadratic amount of deviations between modeled and observable values) can be done by taking *partial derivatives* with respect to $\beta_k$ (lets write them more concise as $\theta=[\beta_1, \beta_2, ... \beta_p]$) because they are coefficients of linear combination of $X$ (matrix of explanatory variables). Such a matrix has following view: $$\begin{bmatrix}
+    x_{11} & \dots & x_{1j} \\
+    \vdots & \ddots & \vdots \\
+    x_{i1} & \dots & x_{ij} \\
+\end{bmatrix}$$ 
+where columns $j$ are some variables and raws $i$ are some units. For example, units are countries (Russia, USA, China) and variables are their population and democracy level. 
+
+Turning to minimization with respect to $\theta$ parameters, we have a *system* of *k* equations of such form (example for $k=1$):
+$$\sum_i{\frac{\partial RSS}{\partial \beta_1}}=\sum_i{2*(-x_{i,1})*(y_i-\beta_1x_{i,1}-\beta_2x_{i,2}-...)}=0$$
+It can be rearranged (by opening brackets and dividing all equations by *-2*) as:
+$$\sum_i{x_{i,1}^2 \beta_1}+\sum_i{(x_{i,2}x_{i,1})\beta_2}+...=\sum_i{x_{i,1}y_i}$$
+In terms of *linear algebra* we have such equation:
+$$X^TX\theta=X^Ty$$
+where one can find $\theta$ by reformulating previous formula as (multiply both parts by $(X^TX)^{-1}$ lefty, because $A^{-1}A=I$ where $I$ is a unit matrix):
+$$\theta = (X^TX)^{-1}X^Ty$$
+This equation has one solution *only if* $det[X^TX]\ne 0$ (see *Assumptions*). Then the full model is:
+$$y=X\theta+\epsilon$$
+or $y=\theta^TX^T+\epsilon$
+
+### Assumptions (*Gauss-Markov theorem*):
+1. *Homoscedasticity*: $Var(\epsilon|x)=const$  
+2. No *multicollinearity*: if $Corr(x_1, x_2)\neq0 \to$ inflated SE, not robust results (drop of observation will significantly change our $\theta$ estimates). In case of *perfect multicollinearity* ($Corr=|1|$, or *dummy variable trap* - just opposite dummies in a model), we cannot find estimation for $\theta$ (because we cannot find inverse matrix of $X^TX$ due to determinant of it equals 0)   
+3. No *endogeneity*: $Corr(\epsilon_i|\epsilon_j)=0$ and $E(\epsilon_i|x_{i,j})=0$    
+4. *Normality of residuals* and $E(\epsilon)=0$     
+Thus, $\epsilon_i \sim i.i.d. N(0,\sigma^2)$, $i.i.d$ - identically independently distributed. Therefore, residuals covariance matrix is $V(\epsilon)=\sigma^2I$
+
+### Properties: 
+If all assumptions are held, than OLS estimation is *Best Linear Unbiased Estimator* (*BLUE*). So, it is:    
+1. *efficient*: min $Var(\hat \theta)$ among all possible linear unbiased estimates of $\theta$  
+2. *unbiased*: $E(\hat \theta)=\theta$  
+3. *consistent*:    
+$$\lim_{n\to \inf}{\sigma^2(X^{(n)T}X^{(n)})^{-1}_{jj}}=0$$
+or
+$$\lim_{n\to \inf}{Var(\hat \theta_i^{(n)})}=0$$
+and because $E(\hat \theta_i^{(n)})=\theta_i$ we can just write:
+$$\lim_{n\to inf}{(\hat \theta^{(n)}_i-\theta_i)}=0$$
+
+### Standard errors and significance:
+For identifying where $\hat{\theta}$ are significant we should calculate its variance $Var(\hat{\theta})$. Lets find covariance matrix where diagonal elements are $Cov(\theta_i,\theta_i)=Var(\theta_i)$: $$V(\hat{\theta})=\hat{\sigma}^2(X^TX)^{-1}$$where $\hat{\sigma}^2$ is estimation of $Var(\hat{\epsilon})$ from estimated model $\hat{Y}=X\hat{\theta}$. Such estimation can be done by using such statistic as: $$S^2=\frac{RSS}{n-p}=\frac{\sum_i{(y_i-\hat y_i)^2}}{n-p}$$
+that is unbiased estimation of $Var(\epsilon)$, because $E(S^2)=Var(\epsilon)$. In other words, it is *Sample Variance* of $\epsilon$. If we have model with only intercept, $S^2$ is just usual sample variance of $y$. 
+Then SE for statistics calculation are just $\sqrt{diag[V(\hat{\theta})]}$. The statistic is $\frac{\hat{\theta}}{se_{\hat{\theta}}}$ with known distribution (*t-distribution*). We use $\frac{\hat{\theta}}{se_{\hat{\theta}}}$ because it simply shows: $$\frac{\hat{\theta}-\theta^0}{se_{\hat{\theta}}} \sim t(n-p)$$where $\hat \theta^0$ shows the value of $\theta$ from $H_0$. Usually it is 0, so we have just $\frac{\hat{\theta}}{se_{\hat{\theta}}}$. But it is possible to use other values of $\hat \theta^0$ to test some specific null hypotheses. For example:
+$$H_0: \theta = 1$$
+Then out test statistic is (it works a little bit more complicated, but the logic is basically like this):
+$$\frac{\hat{\theta}-\theta^0}{se_{\hat{\theta}}}=\frac{\hat{\theta}-1}{se_{\hat{\theta}}}$$
+For identifying *confidence interval* of $\hat\theta$:
+$$\hat\theta_i-t_{1-\alpha/2}\sqrt{Var(\hat\theta_i)}, \hat\theta_i+t_{1-\alpha/2}\sqrt{Var(\hat\theta_i)}$$
+In other words, population parameter $\theta$ is lying in estimated CI with $100(1-\alpha)$% probability. 
+
+### Significance of the model:
+One wants to test significance not of each $\theta_i$, but of the whole model with set of estimated coefficients $\theta$. Thus, joint test is needed, where null hypothesis is: $$H_0: \theta_0=\theta_1=...=\theta_i=0$$
+Thus, alternative hypothesis is that **at least one coefficient $\theta_i$ is not zero**. 
+One of possible approach that tests such joint $H_0$ is *F-test*. Assume we have linear model with set of coefficients $p$ and number of observations $n$. Then the test statistic $F$ is: $$F=\frac{(RSS_{H_0}-RSS)/q}{RSS/(n-p)}=\frac{ESS/(p-1)}{RSS/(n-p)} \sim F(p-1,n-p)$$
+This test basically compare null model (intercept only) and estimated model, where $RSS$ - residuals sum of squares, $ESS$ - explained sum of squares ($TSS-RSS$). Such statistic has $F$ distribution with $p-1$ and $n-p$ degrees of freedom if $\epsilon_i \sim iid \ N(0,\sigma^2)$.  
+
+Note, the first expression can be used to test any joint hypothesis $H_0$ for coefficients, while the last one with $ESS$ can be used only for $H_0$ where all coefficients assumed to be 0. The first expression is useful, for ex., for comparing two not null-models. Assume we have a model: $$y=\theta_0+\theta_1x_i+\theta_2k_i + \theta_3z_i+\epsilon_i$$
+And want to test hypothesis that: $$H_0:\theta_2=\theta_3=0$$
+We can use $F$ test, where $H_0$ model is $y_i=\theta_0+\theta_1x_i+\varepsilon_i$. Then parameter $q$ is a number of tested null coefficients (or more precisely it is the number of linear restrictions for the model). In this example $q=2$. 
+
+### Endogeneity
+
+**Statistical definition**:   
+1. $E(\epsilon|X) \ne 0$    
+2. $Corr(\epsilon, X)\ne0$ 
+
+
+**Main sources of endogeneity:**   
+
+1. *Omitted variable problem*. Omitted significant variable $C$ (appropriate control variable) 
+  - Has effect on Y ($C \to Y$) 
+  - Has effect on X ($C \to X$)     
+  - *Consequence* - biased result for $X$ if our model is: $y=\beta_0+\beta_1x$     
+2. *Selection bias problem* (or post-treatment problem): including of Collider variable $Z$ (inappropriate control variable) 
+	- $Y \to Z$  
+	- $X \to Z$ 
+	- No effect of $X$ on $Y$ 
+	- *Consequence* - biased result for $X$ if oue model is: $y=\beta_0+\beta_1x+\beta_2z$   
+3. *Reverse causality problem* 
+
+**Why we need controls (confounders)?**
+Controls have common variance (=effect) with $X$ (independent variable) and $Y$ (dependent variable). To get less biased estimates for $X$ we have to include controls, because part of common variance of $X$ and $Y$ are due to confounders, so by including them we "clean" common variance between $X$ and $Y$ from "noise" produced by other factors. If we do not do so, "omitted variable bias" and ["backdoor" problem](https://mixtape.scunning.com/03-directed_acyclical_graphs) emerge resulting in *endogeneity* and *biased*, *inconsistent* inference.  
+
+# Panel data
+## Data types: 
+1. Cross-section data - many units at one time (GDP of countries in 2002): $y_i=y_{country}$ 
+2. Time-series data - one unit in time (GDP of Russia from 2002 to 2010): $y_t=y_{year}$ 
+3. Panel data - units are repeated over time: $y_{i,t}=y_{country,year}$ 
+4. Pooled data - panel data where researcher does not consider *time* and *spatial* dependencies 
+
+**Problems with panel data**: 
+
+1. **Interdependence**: 
+	1. cross-sectional correlations (across units)
+	2. autocorrelation (in time)
+	
+2. **Pooled data problem**:
+	1. the problem of ignoring spatial and time effects in the data is a special case of a more general problem, that of omitting variables (endogeneity)
+	2. Aggregation bias (Sympson paradox)
+	3. serial correlations
+	4. inconsistent SE $\to$ wrong statistical inference
+	
+## What to do?
+
+### Fixed-effects (FE)
+
+**FE models** can remove *time-invariant* omitted variables, *unit-invariant* omitted variables, or both from the variance of an outcome. This ability of FE model to remove these confounders is a side effect of the fact that **FE isolate particular dimensions of variance in the data to analyze**.
+
+**LSDV**    
+LSDV - *Least Squares Dummy Variables* model for $N$ cross-sectional/time units): 
+$$y_{i,t}=\beta_0+\gamma_1d_{1,i}+...+\gamma_{(N-1)}d_{N-1,i}+\beta_1x_{i,t}+\varepsilon_{i,t}$$
+where $d$ is a specific binary variable for modeling unit-specific intercept. If set of $d$ is countries and we want include FE for cross-sectional dimension, then $d_{i,1}$ is 1 when country is USA and 0 otherwise. Such model assumes **the same coefficients for all units** but different intercepts. Intercept $\beta_0$ - average level of $y$ in the *reference* cross-sectional/time unit. $\gamma$ - difference in intercept between reference unit and other unit. On average it is a difference in $y$ between some unit and reference category (also some unit) when all other variables being equal.   
+Error term structure: $e_{i,t} = e_i + e_t$ (*cross-sectional* variance + *time dimension* variance).   
+
+**What FE models show?**    
+
+1. **Unit FE:** represents the average effect of a unit-increase in x on y as each variable *changes over time*, generalized to all cases (*as GDP increases for a country over time, how does the quality of its democracy change over time?*) 
+2. **Time FE:** time FE coefficients represent the average effect of a unit-increase in x on y as each variable *changes from case to case*, generalized across all time points (*how much more democratic are wealthier countries than poorer countries at any point in time?*)
+
+### Random-effects (RE)
+
+Instead of usual OLS equation or LSDV OLS we can use RE model with random intercept:
+$$y_{ij}=\beta_{0j}+\beta_1 x_{ij}+r_{ij}$$
+$$\beta_{0j}=\gamma_{00}+u_{0j}$$
+The fist equation refers to the **first-level** (individuals $i$), while the second refers to the **second-level** (clusters $j$). $r_{ij}$ - individual-level error term, $u_{0j}$ - cluster-level error term that modeled both random error and cluster's intercept at individual level (*random intercept*). $W_j$ affects that intercept by $\gamma_{01}$ coefficient. $\gamma_{00}$ - overall intercept. 
+
+All estimated **intercepts are assumed to be random drawings from the same normal distribution** and thus can be easily extended to out-of-sample groups
+
+**Model Assumptions:**
+
+1. $r_{ij} \sim i.i.d. N(0, \sigma^2)$, independent from $X$: $E(r_{ij}|X,W)=0 \to$ *first-level exogeneity* 
+2. $u_{0j} \sim i.i.d. N(0, \tau_{00})$, independent from $X$: $E(u_{0j}|X,W)=0 \to$ *second-level exogeneity* 
+3. $Corr(r_{ij},u_{0j})=0$ 
+
+We can combine above-mentioned equations into one: 
+$$y_{ij}=\gamma_{00}+\beta_1 x_{ij}+(u_{0j}+r_{ij})$$
+Thus, $\gamma_{00}$ - usual intercept, $\varepsilon_{ij}$ is decomposed across two independent source of *Random Variance* - within (individual level) $r_{ij}$ and between (clusters level) $u_{0j}$ clusters. 
+
+### FE vs. RE
+In majority of cases FE is better then RE due to not so strict assumptions. If all assumptions are held but one chooses FE, then estimates are less efficient. However, if one chooses RE instead of FE when not all assumptions are true, then estimates are biased and inconsistent. As you have noted, there are strong assumptions about endogeneity (individual + cluster endogeneity problem and possible problem of **omitted variables either in the first of second levels**). However, there are a lot of cases where RE are appropriate:    
+
+1. If data has hierarchy (nested clusters) and we want to separate within and between variance  
+2. There are cluster's variables -> FE might be in perfect collinearity situation if there is just 1 year of observation (each cluster has unique value of GDP -> perfect multicollinearity) 
+3. If sample is fully random (surveys)  
+4. In other cases - FE: "**without analyzing the contextual effects and coefficient heterogeneity across higher-level units**, the ‘good old’ simple **OLS regression with cluster-robust standard errors and fixed effects** at higher levels should be retained as a valid alternative to MLM." (Oshchepkov, Shirokanova, 2022) 
+5. When **size of clusters** (number of observation in each) **is small** ME are better and more stable 
+
+# Limited DV
+
+Limited Dependent Variables are variables that are not continuous, so binary or ordinal variables with specific distributions. OLS fails to predict them because model does not catch their distributions. In case of binary data, OLS predicts 0.7, -0.3, 123 and other theoretically impossible values (while there are some lovers of *linear probability models*). Because of that, linear estimation is not appropriate and, finally, least-squares estimation is bad approach.   
+
+## Logistic regression 
+Logistic regression models binary dependent variable using *Logit link*. Moreover, it does it in terms of probabilities. Logistic function is:
+$$\pi(x)=\frac{exp(x)}{1+exp(x)}$$ 
+where $\pi$ is a probability that measures from 0 to 1. One can see from equation that indeed $\pi(x)$ takes only positive values (because of $exp$) and changes from 0 to 1 (the denominator is always larger than the numerator because of the addition of a unit). We can rewrite that function in more "regressive" way: 
+$$\pi(X)=\frac{exp(X\theta)}{1+exp(X\theta)}=\frac{1}{1+exp(-X\theta)}$$
+exposing the matrix is an extremely difficult task 
+
+# Rare events data
+
+Revolutions, civil wars, defaults, and coups are **rare events** data that can be considered as **marginal unbalanced binary data** due to the strong predominance of one class (no event). Therefore, specific methods are required to analyze them. 
+
+One such method is logistic regression with a special estimator (Firth, 1993; Kosmidis et al., 2020). 
+
+One more approach involves deliberately removing a significant number of '0's to balance the number of observations in both classes (known as under-sampling, discussed in Menardi and Torelli, 2014). This approach enables the use of classical logistic regression without the concern of imbalance.
+
+As a nonparametric method, one can use a random forest model with a quantile classifier (O'Brien & Ishwaran, 2019), which is specifically designed for classifying unbalanced data. It is important to note that this method allows for the avoidance of assumptions about the form of the relationship. In parametric models, authors are assumed to make an assumption of linearity, but with this method, one can change the form and assumption through simple operations on the variable, such as logarithmization or representing the factor as a polynomial. This approach can lead to reasonably accurate estimates.
+
+Next, we will discuss each approach and its implemintation. 
+
+## Logistic regression with specific estimator 
+
+
+We will use data from `csra` - `dataex` to model association between regime type (VDEM electoral democracy index) and nonviolent (unarmed) revolutions using NAVCO 1.3 database. Note, we have to use regime type with lag (at $t-1$ time) to avoid endogeneity due to indeterminate association ($Y \to X$), because the goal of majority revolutions to change regime type. 
+
+```{r}
+head(csra::datex)
+```
+
+
+```{r,echo=FALSE}
+library(dplyr)
+library(tidyr)
+
+datex <- datex %>% drop_na() %>% mutate(NVC_1.3_NONVIOL = as.numeric(NVC_1.3_NONVIOL)-1)
+```
+
+
+```{r}
+logistic.log <- glm(data = datex, 
+                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2), 
+                family = binomial(link = "logit"))
+
+logistic.clog <- glm(data = datex, 
+                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2), 
+                family = binomial(link = "cloglog"))
+```
+
+```{r, results='asis', echo=FALSE}
+texreg::htmlreg(list(logistic.log, logistic.clog), custom.model.names = c("logit", "cloglog"))
+```
+
+
+### Zelig
+
+```{r}
+# devtools::install_github('IQSS/Zelig')
+library(Zelig)
+tau = sum(datex$NVC_1.3_NONVIOL==1)/nrow(datex)
+
+relogit.pr = zelig(data = datex,
+                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
+                model = "relogit",
+                tau = tau,
+                case.control = "prior",
+                bias.correct = TRUE, cite = F)
+```
+
+
+```{r, results='asis', echo=FALSE}
+
+texreg::htmlreg(list(logistic.log, relogit.pr), 
+                custom.model.names = c("logit", "relogit.prior"))
+
+```
+
+
+a problem with standard errors 
+
+```{r, results='asis', echo=FALSE}
+
+# texreg::htmlreg(list(logistic.log, relogit.pr, relogit.pr.se), custom.model.names = c("logit", "relogit"))
+
+```
+
+
+
+### Logistf
+
+```{r}
+library(logistf)
+
+logist <- logistf(data = datex,
+                  NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
+                  firth = T, flic = T)
+```
+
+```{r, results='asis', echo=FALSE}
+
+comp_pred <- function(x){
+  datn <- data.frame(VDEM_v2x_polyarchy_lag = seq(0,1,0.01)) %>% 
+    mutate(`I(VDEM_v2x_polyarchy_lag^2)` = VDEM_v2x_polyarchy_lag^2)
+  for (model in x){
+    i = i+1
+    pred <- predict(model, newdata = datn, se.fit = T)
+    datn <- datn %>% mutate(k = pred$fit, kk = pred$se.fit)
+    
+  }
+}
+x <- list(logistic.log = logistic.log, logist = logist)
+names(x)
+```
+
+
+### brglm2
+
+```{r}
+library(brglm2)
+
+brglm.jeff = glm(data = datex,
+                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
+                family = binomial(link = "logit"),
+                method = "brglmFit", type = "MPL_Jeffreys")
+
+brglm.mean = glm(data = datex,
+                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
+                family = binomial(link = "logit"),
+                method = "brglmFit", type = "AS_median")
+```
+
+```{r, results='asis', echo=FALSE}
+
+texreg::htmlreg(list(logistic.log, brglm.jeff, brglm.mean), custom.model.names = c("logit", "MPL_Jeffreys", "AS_median"))
+
+```
 
 
 
