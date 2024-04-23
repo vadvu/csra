@@ -119,8 +119,6 @@ $$V(X)=E[(X-E(X))*(X-E(X))^T]$$
 3. $V(AX)=AV(X)A^T$ where $A$ is a constant matrix    
 4. $Cov(cX,zX)=cV(X)z^T$    
 
-
-
 # Econometrics
 ## OLS aka linear regression
 
@@ -286,7 +284,11 @@ Logistic regression models binary dependent variable using *Logit link*. Moreove
 $$\pi(x)=\frac{exp(x)}{1+exp(x)}$$ 
 where $\pi$ is a probability that measures from 0 to 1. One can see from equation that indeed $\pi(x)$ takes only positive values (because of $exp$) and changes from 0 to 1 (the denominator is always larger than the numerator because of the addition of a unit). We can rewrite that function in more "regressive" way: 
 $$\pi(X)=\frac{exp(X\theta)}{1+exp(X\theta)}=\frac{1}{1+exp(-X\theta)}$$
-exposing the matrix is an extremely difficult task 
+exposing the matrix is an extremely difficult task. There is no analytical solution for optimization, so iterative process is used with *Maximum Likelihood* (ML) estimator $L$: 
+$$L=\prod_i^n{\pi_i^{y_i}(1-\pi_i)^{1-y_i}}$$ 
+where $\pi$ is calculated as in previous equation. For optimization process product function is to sophisticated, so we make $L$ by logarithmization to take *log-likelihood*:
+$$l=\sum_i^n{y_iln(\pi_i)}+(1-y_i)ln(1-\pi_i)$$
+The estimation process is simple, but I am not going to discuss it now. 
 
 # Rare events data
 
@@ -299,124 +301,3 @@ One more approach involves deliberately removing a significant number of '0's to
 As a nonparametric method, one can use a random forest model with a quantile classifier (O'Brien & Ishwaran, 2019), which is specifically designed for classifying unbalanced data. It is important to note that this method allows for the avoidance of assumptions about the form of the relationship. In parametric models, authors are assumed to make an assumption of linearity, but with this method, one can change the form and assumption through simple operations on the variable, such as logarithmization or representing the factor as a polynomial. This approach can lead to reasonably accurate estimates.
 
 Next, we will discuss each approach and its implemintation. 
-
-## Logistic regression with specific estimator 
-
-
-We will use data from `csra` - `dataex` to model association between regime type (VDEM electoral democracy index) and nonviolent (unarmed) revolutions using NAVCO 1.3 database. Note, we have to use regime type with lag (at $t-1$ time) to avoid endogeneity due to indeterminate association ($Y \to X$), because the goal of majority revolutions to change regime type. 
-
-```{r}
-head(csra::datex)
-```
-
-
-```{r,echo=FALSE}
-library(dplyr)
-library(tidyr)
-
-datex <- datex %>% drop_na() %>% mutate(NVC_1.3_NONVIOL = as.numeric(NVC_1.3_NONVIOL)-1)
-```
-
-
-```{r}
-logistic.log <- glm(data = datex, 
-                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2), 
-                family = binomial(link = "logit"))
-
-logistic.clog <- glm(data = datex, 
-                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2), 
-                family = binomial(link = "cloglog"))
-```
-
-```{r, results='asis', echo=FALSE}
-texreg::htmlreg(list(logistic.log, logistic.clog), custom.model.names = c("logit", "cloglog"))
-```
-
-
-### Zelig
-
-```{r}
-# devtools::install_github('IQSS/Zelig')
-library(Zelig)
-tau = sum(datex$NVC_1.3_NONVIOL==1)/nrow(datex)
-
-relogit.pr = zelig(data = datex,
-                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
-                model = "relogit",
-                tau = tau,
-                case.control = "prior",
-                bias.correct = TRUE, cite = F)
-```
-
-
-```{r, results='asis', echo=FALSE}
-
-texreg::htmlreg(list(logistic.log, relogit.pr), 
-                custom.model.names = c("logit", "relogit.prior"))
-
-```
-
-
-a problem with standard errors 
-
-```{r, results='asis', echo=FALSE}
-
-# texreg::htmlreg(list(logistic.log, relogit.pr, relogit.pr.se), custom.model.names = c("logit", "relogit"))
-
-```
-
-
-
-### Logistf
-
-```{r}
-library(logistf)
-
-logist <- logistf(data = datex,
-                  NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
-                  firth = T, flic = T)
-```
-
-```{r, results='asis', echo=FALSE}
-
-comp_pred <- function(x){
-  datn <- data.frame(VDEM_v2x_polyarchy_lag = seq(0,1,0.01)) %>% 
-    mutate(`I(VDEM_v2x_polyarchy_lag^2)` = VDEM_v2x_polyarchy_lag^2)
-  for (model in x){
-    i = i+1
-    pred <- predict(model, newdata = datn, se.fit = T)
-    datn <- datn %>% mutate(k = pred$fit, kk = pred$se.fit)
-    
-  }
-}
-x <- list(logistic.log = logistic.log, logist = logist)
-names(x)
-```
-
-
-### brglm2
-
-```{r}
-library(brglm2)
-
-brglm.jeff = glm(data = datex,
-                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
-                family = binomial(link = "logit"),
-                method = "brglmFit", type = "MPL_Jeffreys")
-
-brglm.mean = glm(data = datex,
-                NVC_1.3_NONVIOL ~ VDEM_v2x_polyarchy_lag + I(VDEM_v2x_polyarchy_lag^2),
-                family = binomial(link = "logit"),
-                method = "brglmFit", type = "AS_median")
-```
-
-```{r, results='asis', echo=FALSE}
-
-texreg::htmlreg(list(logistic.log, brglm.jeff, brglm.mean), custom.model.names = c("logit", "MPL_Jeffreys", "AS_median"))
-
-```
-
-
-
-
-
