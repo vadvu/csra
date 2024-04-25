@@ -1,7 +1,6 @@
 ---
 title: "Materials for CSRA students/interns"
 output: rmarkdown::html_vignette
-toc: true
 toc_depth: 3
 ---
 
@@ -38,8 +37,8 @@ Also note extremely powerful package [`sjPlot`](https://strengejacke.github.io/s
 
 **Statistical inference?** It is a conclusion from sample about population based on estimates from a model. Statistical estimation types are: 
 
-1. Interval (like confidence intervals)
-2. Point (like mean)
+1. *Interval* (like confidence intervals)?: Sberbank's price will be from 340 to 360 rubbles in 3 days with 90% of confidence. 
+2. *Point* (like mean): Sberbank's price will be 350 rubbles in 3 days. 
 
 ## Notation and basic concepts:   
 	
@@ -101,7 +100,7 @@ $$\begin{bmatrix}
 3. $E(X+Y)=E(X)+E(Y)$, $X$ and $Y$ are random variables vectors     
 4. $E(AX)=AE(X)$ if $A$ - matrix with constant terms    
 
-The **covariance** of random vector $X=[x_1,...,x_i]^T$ is $V(X)$:
+The **covariance** of random vector $X=[x_1,...,x_i]^T$ is $V(X)$ (you also might see another notation - **$\sum$**):
 $$V(X)=\begin{bmatrix}
     Cov(x_1, x_1) & \dots & Cov(x_1,x_i) \\
     \vdots & \ddots & \vdots \\
@@ -149,7 +148,7 @@ where one can find $\theta$ by reformulating previous formula as (multiply both 
 $$\theta = (X^TX)^{-1}X^Ty$$
 This equation has one solution *only if* $det[X^TX]\ne 0$ (see *Assumptions*). Then the full model is:
 $$y=X\theta+\epsilon$$
-or $y=\theta^TX^T+\epsilon$
+or $$y=\theta^TX+\epsilon$$ 
 
 ### Assumptions (*Gauss-Markov theorem*):
 1. *Homoscedasticity*: $Var(\epsilon|x)=const$  
@@ -196,6 +195,7 @@ We can use $F$ test, where $H_0$ model is $y_i=\theta_0+\theta_1x_i+\varepsilon_
 1. $E(\epsilon|X) \ne 0$    
 2. $Corr(\epsilon, X)\ne0$ 
 
+In other words, $\epsilon$ are not independently distributed. 
 
 **Main sources of endogeneity:**   
 
@@ -213,8 +213,8 @@ We can use $F$ test, where $H_0$ model is $y_i=\theta_0+\theta_1x_i+\varepsilon_
 **Why we need controls (confounders)?**
 Controls have common variance (=effect) with $X$ (independent variable) and $Y$ (dependent variable). To get less biased estimates for $X$ we have to include controls, because part of common variance of $X$ and $Y$ are due to confounders, so by including them we "clean" common variance between $X$ and $Y$ from "noise" produced by other factors. If we do not do so, "omitted variable bias" and ["backdoor" problem](https://mixtape.scunning.com/03-directed_acyclical_graphs) emerge resulting in *endogeneity* and *biased*, *inconsistent* inference.  
 
-# Panel data
-## Data types: 
+## Panel data
+### Data types: 
 1. Cross-section data - many units at one time (GDP of countries in 2002): $y_i=y_{country}$ 
 2. Time-series data - one unit in time (GDP of Russia from 2002 to 2010): $y_t=y_{year}$ 
 3. Panel data - units are repeated over time: $y_{i,t}=y_{country,year}$ 
@@ -232,9 +232,9 @@ Controls have common variance (=effect) with $X$ (independent variable) and $Y$ 
 	3. serial correlations
 	4. inconsistent SE $\to$ wrong statistical inference
 	
-## What to do?
+### What to do?
 
-### Fixed-effects (FE)
+#### Fixed-effects (FE)
 
 **FE models** can remove *time-invariant* omitted variables, *unit-invariant* omitted variables, or both from the variance of an outcome. This ability of FE model to remove these confounders is a side effect of the fact that **FE isolate particular dimensions of variance in the data to analyze**.
 
@@ -249,7 +249,7 @@ Error term structure: $\varepsilon_{i,t} = \varepsilon_i + \varepsilon_t$ (*cros
 1. **Unit FE:** represents the average effect of a unit-increase in x on y as each variable *changes over time*, generalized to all cases (*as GDP increases for a country over time, how does the quality of its democracy change over time?*) 
 2. **Time FE:** time FE coefficients represent the average effect of a unit-increase in x on y as each variable *changes from case to case*, generalized across all time points (*how much more democratic are wealthier countries than poorer countries at any point in time?*)
 
-### Random-effects (RE)
+#### Random-effects (RE)
 
 Instead of usual OLS equation or LSDV OLS we can use RE model with random intercept:
 $$y_{ij}=\beta_{0j}+\beta_1 x_{ij}+r_{ij}$$
@@ -268,7 +268,7 @@ We can combine above-mentioned equations into one:
 $$y_{ij}=\gamma_{00}+\beta_1 x_{ij}+(u_{0j}+r_{ij})$$
 Thus, $\gamma_{00}$ - usual intercept, $\varepsilon_{ij}$ is decomposed across two independent source of *Random Variance* - within (individual level) $r_{ij}$ and between (clusters level) $u_{0j}$ clusters. 
 
-### FE vs. RE
+#### FE vs. RE
 In majority of cases FE is better then RE due to not so strict assumptions. If all assumptions are held but one chooses FE, then estimates are less efficient. However, if one chooses RE instead of FE when not all assumptions are true, then estimates are biased and inconsistent. As you have noted, there are strong assumptions about endogeneity (individual + cluster endogeneity problem and possible problem of **omitted variables either in the first of second levels**). However, there are a lot of cases where RE are appropriate:    
 
 1. If data has hierarchy (nested clusters) and we want to separate within and between variance  
@@ -277,11 +277,11 @@ In majority of cases FE is better then RE due to not so strict assumptions. If a
 4. In other cases - FE: "**without analyzing the contextual effects and coefficient heterogeneity across higher-level units**, the ‘good old’ simple **OLS regression with cluster-robust standard errors and fixed effects** at higher levels should be retained as a valid alternative to MLM." (Oshchepkov, Shirokanova, 2022) 
 5. When **size of clusters** (number of observation in each) **is small** ME are better and more stable 
 
-# Limited DV
+## Limited DV
 
 Limited Dependent Variables are variables that are not continuous, so binary or ordinal variables with specific distributions. OLS fails to predict them because model does not catch their distributions. In case of binary data, OLS predicts 0.7, -0.3, 123 and other theoretically impossible values (while there are some lovers of *linear probability models*). Because of that, linear estimation is not appropriate and, finally, least-squares estimation is bad approach.   
 
-## Logistic regression 
+### Logistic regression 
 Logistic regression models binary dependent variable using *Logit link*. Moreover, it does it in terms of probabilities. Logistic function is:
 $$\pi(x)=\frac{exp(x)}{1+exp(x)}$$ 
 where $\pi$ is a probability that measures from 0 to 1. One can see from equation that indeed $\pi(x)$ takes only positive values (because of $exp$) and changes from 0 to 1 (the denominator is always larger than the numerator because of the addition of a unit). We can rewrite that function in more "regressive" way: 
@@ -289,16 +289,19 @@ $$\pi(X)=\frac{exp(X\theta)}{1+exp(X\theta)}=\frac{1}{1+exp(-X\theta)}$$
 exposing the matrix is an extremely difficult task. There is no analytical solution for optimization, so iterative process is used with *Maximum Likelihood* (ML) estimator $L$: 
 $$L=\prod_i^n{\pi_i^{y_i}(1-\pi_i)^{1-y_i}}$$ 
 where $\pi$ is calculated as in previous equation. For optimization process product function is to sophisticated, so we make $L$ by logarithmization to take *log-likelihood*:
-$$l=\sum_i^n{y_iln(\pi_i)}+(1-y_i)ln(1-\pi_i)$$
+
+$$l=\sum_i^n [y_iln(\pi_i)+(1-y_i)ln(1-\pi_i)]$$
+$$l=\sum_i^n[y_iln(\frac{1}{1+exp(-X\theta)})+(1-y_i)(\frac{1}{1+exp(-X\theta)})]$$
+$$l=\sum_i^n [y_i X\theta-ln(1+exp(X\theta))]$$
 The estimation process is simple, but I am not going to discuss it now. 
 
 # Rare events data
 
 Revolutions, civil wars, defaults, and coups are **rare events** data that can be considered as **marginal unbalanced binary data** due to the strong predominance of one class (no event). Therefore, specific methods are required to analyze them. 
 
-One such method is logistic regression with a special estimator (Firth, 1993; Kosmidis et al., 2020). 
+One such method is logistic regression with a special estimator (Firth, 1993; Kosmidis et al., 2020) that transforms ML to make it consistent in case of imbalanced data problem. 
 
-One more approach involves deliberately removing a significant number of '0's to balance the number of observations in both classes (known as under-sampling, discussed in Menardi and Torelli, 2014). This approach enables the use of classical logistic regression without the concern of imbalance.
+One more approach involves deliberately removing a significant number of '0's to balance the number of observations in both classes (known as under-sampling with matching, discussed in Menardi and Torelli, 2014). This approach enables the use of classical logistic regression without the concern of imbalance.
 
 As a nonparametric method, one can use a random forest model with a quantile classifier (O'Brien & Ishwaran, 2019), which is specifically designed for classifying unbalanced data. It is important to note that this method allows for the avoidance of assumptions about the form of the relationship. In parametric models, authors are assumed to make an assumption of linearity, but with this method, one can change the form and assumption through simple operations on the variable, such as logarithmization or representing the factor as a polynomial. This approach can lead to reasonably accurate estimates.
 
