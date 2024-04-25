@@ -126,8 +126,12 @@ tables and etc.</p>
 sample about population based on estimates from a model. Statistical
 estimation types are:</p>
 <ol style="list-style-type: decimal">
-<li>Interval (like confidence intervals)</li>
-<li>Point (like mean)</li>
+<li>
+<em>Interval</em> (like confidence intervals)?: Sberbank’s price
+will be from 340 to 360 rubbles in 3 days with 90% of confidence.</li>
+<li>
+<em>Point</em> (like mean): Sberbank’s price will be 350 rubbles in
+3 days.</li>
 </ol>
 <div class="section level3">
 <h3 id="notation-and-basic-concepts">Notation and basic concepts:<a class="anchor" aria-label="anchor" href="#notation-and-basic-concepts"></a>
@@ -257,7 +261,8 @@ constant-vector, then <span class="math inline">\(E(B)=B\)</span> 2.
 <span class="math inline">\(E(cX)=cE(X)\)</span>, if <span class="math inline">\(c\)</span> - some constant term<br>
 3. <span class="math inline">\(E(X+Y)=E(X)+E(Y)\)</span>, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are random variables vectors<br>
 4. <span class="math inline">\(E(AX)=AE(X)\)</span> if <span class="math inline">\(A\)</span> - matrix with constant terms</p>
-<p>The <strong>covariance</strong> of random vector <span class="math inline">\(X=[x_1,...,x_i]^T\)</span> is <span class="math inline">\(V(X)\)</span>: <span class="math display">\[V(X)=\begin{bmatrix}
+<p>The <strong>covariance</strong> of random vector <span class="math inline">\(X=[x_1,...,x_i]^T\)</span> is <span class="math inline">\(V(X)\)</span> (you also might see another notation
+- <strong><span class="math inline">\(\sum\)</span></strong>): <span class="math display">\[V(X)=\begin{bmatrix}
     Cov(x_1, x_1) &amp; \dots &amp; Cov(x_1,x_i) \\
     \vdots &amp; \ddots &amp; \vdots \\
     Cov(x_i, x_1) &amp; \dots &amp; Cov(x_i, x_i) \\
@@ -317,7 +322,7 @@ It can be rearranged (by opening brackets and dividing all equations by
 In terms of <em>linear algebra</em> we have such equation: <span class="math display">\[X^TX\theta=X^Ty\]</span> where one can find <span class="math inline">\(\theta\)</span> by reformulating previous formula
 as (multiply both parts by <span class="math inline">\((X^TX)^{-1}\)</span> lefty, because <span class="math inline">\(A^{-1}A=I\)</span> where <span class="math inline">\(I\)</span> is a unit matrix): <span class="math display">\[\theta = (X^TX)^{-1}X^Ty\]</span> This equation
 has one solution <em>only if</em> <span class="math inline">\(det[X^TX]\ne 0\)</span> (see
-<em>Assumptions</em>). Then the full model is: <span class="math display">\[y=X\theta+\epsilon\]</span> or <span class="math inline">\(y=\theta^TX^T+\epsilon\)</span></p>
+<em>Assumptions</em>). Then the full model is: <span class="math display">\[y=X\theta+\epsilon\]</span> or <span class="math display">\[y=\theta^TX+\epsilon\]</span></p>
 </div>
 <div class="section level4">
 <h4 id="assumptions-gauss-markov-theorem">Assumptions (<em>Gauss-Markov theorem</em>):<a class="anchor" aria-label="anchor" href="#assumptions-gauss-markov-theorem"></a>
@@ -420,6 +425,8 @@ restrictions for the model). In this example <span class="math inline">\(q=2\)</
 <p><strong>Statistical definition</strong>:<br>
 1. <span class="math inline">\(E(\epsilon|X) \ne 0\)</span><br>
 2. <span class="math inline">\(Corr(\epsilon, X)\ne0\)</span></p>
+<p>In other words, <span class="math inline">\(\epsilon\)</span> are not
+independently distributed.</p>
 <p><strong>Main sources of endogeneity:</strong></p>
 <ol style="list-style-type: decimal">
 <li>
@@ -466,13 +473,12 @@ problem</a> emerge resulting in <em>endogeneity</em> and
 <em>biased</em>, <em>inconsistent</em> inference.</p>
 </div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="panel-data">Panel data<a class="anchor" aria-label="anchor" href="#panel-data"></a>
-</h2>
 <div class="section level3">
-<h3 id="data-types">Data types:<a class="anchor" aria-label="anchor" href="#data-types"></a>
+<h3 id="panel-data">Panel data<a class="anchor" aria-label="anchor" href="#panel-data"></a>
 </h3>
+<div class="section level4">
+<h4 id="data-types">Data types:<a class="anchor" aria-label="anchor" href="#data-types"></a>
+</h4>
 <ol style="list-style-type: decimal">
 <li>Cross-section data - many units at one time (GDP of countries in
 2002): <span class="math inline">\(y_i=y_{country}\)</span>
@@ -508,12 +514,12 @@ statistical inference</li>
 </li>
 </ol>
 </div>
-<div class="section level3">
-<h3 id="what-to-do">What to do?<a class="anchor" aria-label="anchor" href="#what-to-do"></a>
-</h3>
 <div class="section level4">
-<h4 id="fixed-effects-fe">Fixed-effects (FE)<a class="anchor" aria-label="anchor" href="#fixed-effects-fe"></a>
+<h4 id="what-to-do">What to do?<a class="anchor" aria-label="anchor" href="#what-to-do"></a>
 </h4>
+<div class="section level5">
+<h5 id="fixed-effects-fe">Fixed-effects (FE)<a class="anchor" aria-label="anchor" href="#fixed-effects-fe"></a>
+</h5>
 <p><strong>FE models</strong> can remove <em>time-invariant</em> omitted
 variables, <em>unit-invariant</em> omitted variables, or both from the
 variance of an outcome. This ability of FE model to remove these
@@ -549,9 +555,9 @@ democratic are wealthier countries than poorer countries at any point in
 time?</em>)</li>
 </ol>
 </div>
-<div class="section level4">
-<h4 id="random-effects-re">Random-effects (RE)<a class="anchor" aria-label="anchor" href="#random-effects-re"></a>
-</h4>
+<div class="section level5">
+<h5 id="random-effects-re">Random-effects (RE)<a class="anchor" aria-label="anchor" href="#random-effects-re"></a>
+</h5>
 <p>Instead of usual OLS equation or LSDV OLS we can use RE model with
 random intercept: <span class="math display">\[y_{ij}=\beta_{0j}+\beta_1
 x_{ij}+r_{ij}\]</span> <span class="math display">\[\beta_{0j}=\gamma_{00}+u_{0j}\]</span> The fist
@@ -583,9 +589,9 @@ independent source of <em>Random Variance</em> - within (individual
 level) <span class="math inline">\(r_{ij}\)</span> and between (clusters
 level) <span class="math inline">\(u_{0j}\)</span> clusters.</p>
 </div>
-<div class="section level4">
-<h4 id="fe-vs--re">FE vs. RE<a class="anchor" aria-label="anchor" href="#fe-vs--re"></a>
-</h4>
+<div class="section level5">
+<h5 id="fe-vs--re">FE vs. RE<a class="anchor" aria-label="anchor" href="#fe-vs--re"></a>
+</h5>
 <p>In majority of cases FE is better then RE due to not so strict
 assumptions. If all assumptions are held but one chooses FE, then
 estimates are less efficient. However, if one chooses RE instead of FE
@@ -616,9 +622,9 @@ each) <strong>is small</strong> ME are better and more stable</li>
 </div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="limited-dv">Limited DV<a class="anchor" aria-label="anchor" href="#limited-dv"></a>
-</h2>
+<div class="section level3">
+<h3 id="limited-dv">Limited DV<a class="anchor" aria-label="anchor" href="#limited-dv"></a>
+</h3>
 <p>Limited Dependent Variables are variables that are not continuous, so
 binary or ordinal variables with specific distributions. OLS fails to
 predict them because model does not catch their distributions. In case
@@ -626,9 +632,9 @@ of binary data, OLS predicts 0.7, -0.3, 123 and other theoretically
 impossible values (while there are some lovers of <em>linear probability
 models</em>). Because of that, linear estimation is not appropriate and,
 finally, least-squares estimation is bad approach.</p>
-<div class="section level3">
-<h3 id="logistic-regression">Logistic regression<a class="anchor" aria-label="anchor" href="#logistic-regression"></a>
-</h3>
+<div class="section level4">
+<h4 id="logistic-regression">Logistic regression<a class="anchor" aria-label="anchor" href="#logistic-regression"></a>
+</h4>
 <p>Logistic regression models binary dependent variable using <em>Logit
 link</em>. Moreover, it does it in terms of probabilities. Logistic
 function is: <span class="math display">\[\pi(x)=\frac{exp(x)}{1+exp(x)}\]</span> where
@@ -644,9 +650,13 @@ analytical solution for optimization, so iterative process is used with
 where <span class="math inline">\(\pi\)</span> is calculated as in
 previous equation. For optimization process product function is to
 sophisticated, so we make <span class="math inline">\(L\)</span> by
-logarithmization to take <em>log-likelihood</em>: <span class="math display">\[l=\sum_i^n{y_iln(\pi_i)}+(1-y_i)ln(1-\pi_i)\]</span>
-The estimation process is simple, but I am not going to discuss it
-now.</p>
+logarithmization to take <em>log-likelihood</em>:</p>
+<p><span class="math display">\[l=\sum_i^n
+[y_iln(\pi_i)+(1-y_i)ln(1-\pi_i)]\]</span> <span class="math display">\[l=\sum_i^n[y_iln(\frac{1}{1+exp(-X\theta)})+(1-y_i)(\frac{1}{1+exp(-X\theta)})]\]</span>
+<span class="math display">\[l=\sum_i^n [y_i
+X\theta-ln(1+exp(X\theta))]\]</span> The estimation process is simple,
+but I am not going to discuss it now.</p>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -658,12 +668,13 @@ unbalanced binary data</strong> due to the strong predominance of one
 class (no event). Therefore, specific methods are required to analyze
 them.</p>
 <p>One such method is logistic regression with a special estimator
-(Firth, 1993; Kosmidis et al., 2020).</p>
+(Firth, 1993; Kosmidis et al., 2020) that transforms ML to make it
+consistent in case of imbalanced data problem.</p>
 <p>One more approach involves deliberately removing a significant number
 of ’0’s to balance the number of observations in both classes (known as
-under-sampling, discussed in Menardi and Torelli, 2014). This approach
-enables the use of classical logistic regression without the concern of
-imbalance.</p>
+under-sampling with matching, discussed in Menardi and Torelli, 2014).
+This approach enables the use of classical logistic regression without
+the concern of imbalance.</p>
 <p>As a nonparametric method, one can use a random forest model with a
 quantile classifier (O’Brien &amp; Ishwaran, 2019), which is
 specifically designed for classifying unbalanced data. It is important
