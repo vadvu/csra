@@ -14,7 +14,7 @@ sdiff(x, y, n = 1000)
 \item{n}{Number of simulations for constriction Null hypothesis area. Default \code{n=1000}}
 }
 \value{
-summary and plot
+ggplot
 }
 \description{
 Nonparametric test for comparing means in 2 groups
