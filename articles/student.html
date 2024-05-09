@@ -64,8 +64,8 @@
 
 
 
-
-<div class="row">
+<link href="student_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="student_files/pagedtable-1.1/js/pagedtable.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Materials for CSRA students/interns</h1>
             
@@ -310,9 +310,19 @@ variables). Such a matrix has following view: <span class="math display">\[\begi
     x_{11} &amp; \dots &amp; x_{1j} \\
     \vdots &amp; \ddots &amp; \vdots \\
     x_{i1} &amp; \dots &amp; x_{ij} \\
-\end{bmatrix}\]</span> where columns <span class="math inline">\(j\)</span> are some variables and raws <span class="math inline">\(i\)</span> are some units. For example, units are
-countries (Russia, USA, China) and variables are their population and
+\end{bmatrix}\]</span> where columns <span class="math inline">\(j\)</span> are some variables and rows <span class="math inline">\(i\)</span> are some units. For example, units are
+countries (Russia, USA, France) and variables are their population and
 democracy level.</p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Country code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Democracy level"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Population (in thousands)"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"FRA","2":"0.894","3":"63715.22"},{"1":"RUS","2":"0.271","3":"144441.86"},{"1":"USA","2":"0.905","3":"323348.65"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>That is <span class="math display">\[\begin{bmatrix}
+    0.894 &amp;  63715.22 \\
+    0.271 &amp; 63715.22 \\
+    0.905 &amp; 323348.65 \\
+\end{bmatrix}\]</span></p>
 <p>Turning to minimization with respect to <span class="math inline">\(\theta\)</span> parameters, we have a
 <em>system</em> of <em>k</em> equations of such form (example for <span class="math inline">\(k=1\)</span>): <span class="math display">\[\sum_i{\frac{\partial RSS}{\partial
 \beta_1}}=\sum_i{2*(-x_{i,1})*(y_i-\beta_1x_{i,1}-\beta_2x_{i,2}-...)}=0\]</span>
@@ -491,6 +501,24 @@ problem</a> emerge resulting in <em>endogeneity</em> and
 <li>Pooled data - panel data where researcher does not consider
 <em>time</em> and <em>spatial</em> dependencies</li>
 </ol>
+<p><em>Cross-section data</em></p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Country"],"name":[1],"type":["chr"],"align":["left"]},{"label":["GDPpc"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Russia","2":"1900"},{"1":"USA","2":"3500"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><em>Time-series data</em></p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["GDPpc"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"2000","2":"1900"},{"1":"2001","2":"1950"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><em>Panel data</em> (cross-section + time-series)</p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Country"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Year"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["GDPpc"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Russia","2":"2000","3":"1900"},{"1":"Russia","2":"2001","3":"1950"},{"1":"USA","2":"2000","3":"3500"},{"1":"USA","2":"2001","3":"3600"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><strong>Problems with panel data</strong>:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -636,17 +664,24 @@ finally, least-squares estimation is bad approach.</p>
 <h4 id="logistic-regression">Logistic regression<a class="anchor" aria-label="anchor" href="#logistic-regression"></a>
 </h4>
 <p>Logistic regression models binary dependent variable using <em>Logit
-link</em>. Moreover, it does it in terms of probabilities. Logistic
-function is: <span class="math display">\[\pi(x)=\frac{exp(x)}{1+exp(x)}\]</span> where
+link</em>. Moreover, it does it in terms of probabilities. Assume we
+have binary dependent variable <span class="math inline">\(Y\)</span>
+that follows Bernoulli distribution (that is a special case of binomial
+distribution with 1 trial): <span class="math display">\[Y\sim
+Be(\pi[X])\]</span> with probability of getting “success” (or “1”) <span class="math inline">\(\pi\)</span> that depends on vector of parameters
+<span class="math inline">\(X\)</span>. That probability is calculated
+as logistic function: <span class="math display">\[\pi(X)=\frac{exp(X)}{1+exp(X)}\]</span> where
 <span class="math inline">\(\pi\)</span> is a probability that measures
 from 0 to 1. One can see from equation that indeed <span class="math inline">\(\pi(x)\)</span> takes only positive values
 (because of <span class="math inline">\(exp\)</span>) and changes from 0
 to 1 (the denominator is always larger than the numerator because of the
 addition of a unit). We can rewrite that function in more “regressive”
 way: <span class="math display">\[\pi(X)=\frac{exp(X\theta)}{1+exp(X\theta)}=\frac{1}{1+exp(-X\theta)}\]</span>
-exposing the matrix is an extremely difficult task. There is no
-analytical solution for optimization, so iterative process is used with
-<em>Maximum Likelihood</em> (ML) estimator <span class="math inline">\(L\)</span>: <span class="math display">\[L=\prod_i^n{\pi_i^{y_i}(1-\pi_i)^{1-y_i}}\]</span>
+We know that probability function for Bernoulli distribution is: <span class="math display">\[P(Y_i|\pi_i)=\pi_i^{Y_i}(1-\pi_i)^{(1-Y_i)}\]</span>
+and we try to estimate it. There is no analytical solution for
+optimization, so iterative process is used with <em>Maximum
+Likelihood</em> (ML) estimator <span class="math inline">\(L\)</span>
+with an assumption about observations independence: <span class="math display">\[L=\prod_i^n{\pi_i^{y_i}(1-\pi_i)^{1-y_i}}\]</span>
 where <span class="math inline">\(\pi\)</span> is calculated as in
 previous equation. For optimization process product function is to
 sophisticated, so we make <span class="math inline">\(L\)</span> by
@@ -655,7 +690,27 @@ logarithmization to take <em>log-likelihood</em>:</p>
 [y_iln(\pi_i)+(1-y_i)ln(1-\pi_i)]\]</span> <span class="math display">\[l=\sum_i^n[y_iln(\frac{1}{1+exp(-X\theta)})+(1-y_i)(\frac{1}{1+exp(-X\theta)})]\]</span>
 <span class="math display">\[l=\sum_i^n [y_i
 X\theta-ln(1+exp(X\theta))]\]</span> The estimation process is simple,
-but I am not going to discuss it now.</p>
+but I am not going to discuss it now. Simply put, ML works by finding
+the value of <span class="math inline">\(\hat{\theta}\)</span> that
+gives the maximum value of this function <span class="math inline">\(l\)</span>. Our <span class="math inline">\(\hat{\theta}\)</span> are consistent and
+asymptotically efficient except perfect collinearity of <span class="math inline">\(X\)</span> or perfect discrimination between 0 and
+1.</p>
+<p>The covariance matrix is estimated as: <span class="math display">\[V(\hat{\theta})=I^{-1}(\hat{\theta})\]</span>
+where <span class="math inline">\(I\)</span> is information matrix that
+is calculated as: <span class="math display">\[I(\hat{\theta})=X^T
+\hat{W}X\]</span> where <span class="math inline">\(\hat{W}\)</span> is
+estimated variance of <span class="math inline">\(Y\)</span> that has
+the following diagonal matrix <span class="math inline">\(n*n\)</span>:
+<span class="math display">\[\begin{bmatrix}
+    \pi_{1}(1-\pi_{1}) &amp; \dots &amp; 0 \\
+    \vdots &amp; \ddots &amp; \vdots \\
+    0 &amp; \dots &amp; \pi_{n}(1-\pi_{n}) \\
+\end{bmatrix}\]</span> Thus, finally we have: <span class="math display">\[V(\hat{\theta})=[\sum_i^n{\pi_i(1-\pi_i)X^TX}]^{-1}=\]</span>
+<span class="math display">\[=(X^T \hat{W}X)^{-1}\]</span> standard
+errors then are just squared root from diagonal of <span class="math inline">\(V(\hat{\theta})\)</span> and the test statistic
+for <span class="math inline">\(\hat{\theta}\)</span> follows standard
+normal distribution and is calculated as: <span class="math display">\[\frac{\hat{\theta}}{se_{\hat{\theta}}} \sim
+N(0,1)\]</span></p>
 </div>
 </div>
 </div>

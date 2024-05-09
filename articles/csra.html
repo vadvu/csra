@@ -194,7 +194,41 @@ to 95% CI.<br>
 10. <code>high95CI</code> - higher Wald 95% interval (97.5%).</p>
 </div>
 <div class="section level2">
-<h2 id="example-2-u_shape_test">Example 2: <code>U_shape_test()</code><a class="anchor" aria-label="anchor" href="#example-2-u_shape_test"></a>
+<h2 id="example-2-sdiff">Example 2: <code>sdiff()</code><a class="anchor" aria-label="anchor" href="#example-2-sdiff"></a>
+</h2>
+<p>This function implements nonparametric test (alternative to t-test)
+based on Monte Carlo Simulations. The idea is straightforward. First,
+the initial difference between the groups is counted. Null hypothesis -
+this difference is equal to zero, alternative hypothesis - the
+difference is significantly different from zero. To test this
+hypothesis, an iterative procedure is created where values from both
+groups are randomly mixed (i.e. each observation can be randomly
+assigned to one of the groups). Due to randomness, the difference in the
+mean of the mixed groups should be zero. After a thousand such
+procedures, we construct a distribution of the resulting differences and
+then simply compare it with the observed difference. Consider the
+following example:</p>
+<p>We firstly simulate two random variables - <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Lets assume that they show
+state-capacity index in group of countries that have never experienced
+revolutions (<span class="math inline">\(X\)</span>) and the same index
+in the group of countries that have experienced at least one revolution
+in their history. We want to know - is there a statistically significant
+difference.</p>
+<p>In our simulated example, <span class="math inline">\(X \sim
+N(0.5,2^2)\)</span> and <span class="math inline">\(Y \sim
+N(2,2^2)\)</span>. So, indeed there is a difference in means. Lets try
+to statistically support it.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">0.5</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/sdiff.html">sdiff</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, n <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<p><img src="csra_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<p>Indeed, there is a statistically significant difference and one can
+reject <span class="math inline">\(H_0\)</span> at any acceptable
+confidence level.</p>
+</div>
+<div class="section level2">
+<h2 id="example-3-u_shape_test">Example 3: <code>U_shape_test()</code><a class="anchor" aria-label="anchor" href="#example-3-u_shape_test"></a>
 </h2>
 <p>Another function (in the DEMO stage) is the
 <code><a href="../reference/U_shape_test.html">U_shape_test()</a></code>, which aims to detect hump-shaped forms of
@@ -277,7 +311,7 @@ economics and statistics, 72(1), 109-118.<br>
 - Simonsohn, U. (2018). Two lines: A valid alternative to the invalid
 testing of U-shaped relationships with quadratic regressions. Advances
 in Methods and Practices in Psychological Science, 1(4), 538-555.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/U_shape_test.html">U_shape_test</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">datex</span>, <span class="co">#our data</span></span>
 <span>  dep <span class="op">=</span> <span class="st">"NVC_1.3_NONVIOL"</span>, <span class="co">#dependent variable</span></span>
@@ -317,7 +351,7 @@ in Methods and Practices in Psychological Science, 1(4), 538-555.</p>
 <span><span class="co">#&gt; AIC glm - AIC gam                     -2.84           </span></span>
 <span><span class="co">#&gt; ======================================================</span></span>
 <span><span class="co">#&gt; Note:                      *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></span></code></pre></div>
-<p><img src="csra_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<p><img src="csra_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="some-additional-functions">Some additional functions<a class="anchor" aria-label="anchor" href="#some-additional-functions"></a>
@@ -337,7 +371,7 @@ Polity-V data into 5-class variable:<br>
 3. partial democracy<br>
 4. partial democracy with factionalism<br>
 5. full democracy</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">polity5data</span><span class="op">$</span><span class="va">goldstone_regime</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/goldclass.html">goldclass</a></span><span class="op">(</span>exrec <span class="op">=</span> <span class="va">polity5data</span><span class="op">$</span><span class="va">exrec</span>, parcomp <span class="op">=</span> <span class="va">polity5data</span><span class="op">$</span><span class="va">parcomp</span><span class="op">)</span></span></code></pre></div>
 </div>
