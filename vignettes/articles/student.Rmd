@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, echo=FALSE}
 library(csra)
+library(dplyr)
 ```
 
 # Some R
@@ -136,7 +137,26 @@ Minimization of that sum (the quadratic amount of deviations between modeled and
     \vdots & \ddots & \vdots \\
     x_{i1} & \dots & x_{ij} \\
 \end{bmatrix}$$ 
-where columns $j$ are some variables and raws $i$ are some units. For example, units are countries (Russia, USA, China) and variables are their population and democracy level. 
+where columns $j$ are some variables and rows $i$ are some units. For example, units are countries (Russia, USA, France) and variables are their population and democracy level. 
+
+```{r, echo=FALSE}
+rmarkdown::paged_table(csra::datex %>% 
+                         filter(year == 2015) %>% 
+                         filter(iso3 %in% c("RUS", "USA", "FRA")) %>% 
+                         mutate(UN_Total_Population_log = exp(UN_Total_Population_log)) %>% 
+                         select(`Country code` = iso3, 
+                                `Democracy level` = VDEM_v2x_polyarchy, 
+                                `Population (in thousands)`= UN_Total_Population_log
+                                )
+                         )
+```
+
+That is 
+$$\begin{bmatrix}
+    0.894 &  63715.22 \\
+    0.271 & 63715.22 \\
+    0.905 & 323348.65 \\
+\end{bmatrix}$$ 
 
 Turning to minimization with respect to $\theta$ parameters, we have a *system* of *k* equations of such form (example for $k=1$):
 $$\sum_i{\frac{\partial RSS}{\partial \beta_1}}=\sum_i{2*(-x_{i,1})*(y_i-\beta_1x_{i,1}-\beta_2x_{i,2}-...)}=0$$
@@ -218,7 +238,29 @@ Controls have common variance (=effect) with $X$ (independent variable) and $Y$ 
 1. Cross-section data - many units at one time (GDP of countries in 2002): $y_i=y_{country}$ 
 2. Time-series data - one unit in time (GDP of Russia from 2002 to 2010): $y_t=y_{year}$ 
 3. Panel data - units are repeated over time: $y_{i,t}=y_{country,year}$ 
-4. Pooled data - panel data where researcher does not consider *time* and *spatial* dependencies 
+4. Pooled data - panel data where researcher does not consider *time* and *spatial* dependencies    
+
+*Cross-section data*
+
+```{r, echo=FALSE}
+rmarkdown::paged_table(data.frame(Country = c("Russia", "USA"), GDPpc = c(1900, 3500)))
+```
+
+*Time-series data* 
+
+```{r, echo=FALSE}
+rmarkdown::paged_table(data.frame(Year = c(2000, 2001), GDPpc = c(1900, 1950)))
+```
+
+*Panel data* (cross-section + time-series) 
+
+```{r, echo=FALSE}
+rmarkdown::paged_table(data.frame(Country = c("Russia","Russia","USA","USA"),
+                                  Year = c(2000, 2001, 2000, 2001), 
+                                  GDPpc = c(1900, 1950, 3500, 3600)
+                                  )
+                       )
+```
 
 **Problems with panel data**: 
 
@@ -282,18 +324,32 @@ In majority of cases FE is better then RE due to not so strict assumptions. If a
 Limited Dependent Variables are variables that are not continuous, so binary or ordinal variables with specific distributions. OLS fails to predict them because model does not catch their distributions. In case of binary data, OLS predicts 0.7, -0.3, 123 and other theoretically impossible values (while there are some lovers of *linear probability models*). Because of that, linear estimation is not appropriate and, finally, least-squares estimation is bad approach.   
 
 ### Logistic regression 
-Logistic regression models binary dependent variable using *Logit link*. Moreover, it does it in terms of probabilities. Logistic function is:
-$$\pi(x)=\frac{exp(x)}{1+exp(x)}$$ 
+Logistic regression models binary dependent variable using *Logit link*. Moreover, it does it in terms of probabilities. Assume we have binary dependent variable $Y$ that follows Bernoulli distribution (that is a special case of binomial distribution with 1 trial): $$Y\sim Be(\pi[X])$$
+with probability of getting "success" (or "1") $\pi$ that depends on vector of parameters $X$. That probability is calculated as logistic function: 
+$$\pi(X)=\frac{exp(X)}{1+exp(X)}$$ 
 where $\pi$ is a probability that measures from 0 to 1. One can see from equation that indeed $\pi(x)$ takes only positive values (because of $exp$) and changes from 0 to 1 (the denominator is always larger than the numerator because of the addition of a unit). We can rewrite that function in more "regressive" way: 
 $$\pi(X)=\frac{exp(X\theta)}{1+exp(X\theta)}=\frac{1}{1+exp(-X\theta)}$$
-exposing the matrix is an extremely difficult task. There is no analytical solution for optimization, so iterative process is used with *Maximum Likelihood* (ML) estimator $L$: 
-$$L=\prod_i^n{\pi_i^{y_i}(1-\pi_i)^{1-y_i}}$$ 
+We know that probability function for Bernoulli distribution is: $$P(Y_i|\pi_i)=\pi_i^{Y_i}(1-\pi_i)^{(1-Y_i)}$$
+and we try to estimate it. There is no analytical solution for optimization, so iterative process is used with *Maximum Likelihood* (ML) estimator $L$ with an assumption about observations independence: 
+$$L=\prod_i^n{\pi_i^{y_i}(1-\pi_i)^{1-y_i}}$$
 where $\pi$ is calculated as in previous equation. For optimization process product function is to sophisticated, so we make $L$ by logarithmization to take *log-likelihood*:
 
 $$l=\sum_i^n [y_iln(\pi_i)+(1-y_i)ln(1-\pi_i)]$$
 $$l=\sum_i^n[y_iln(\frac{1}{1+exp(-X\theta)})+(1-y_i)(\frac{1}{1+exp(-X\theta)})]$$
 $$l=\sum_i^n [y_i X\theta-ln(1+exp(X\theta))]$$
-The estimation process is simple, but I am not going to discuss it now. 
+The estimation process is simple, but I am not going to discuss it now. Simply put, ML works by finding the value of $\hat{\theta}$ that gives the maximum value of this function $l$.  Our $\hat{\theta}$ are consistent and asymptotically efficient except perfect collinearity of $X$ or perfect discrimination between 0 and 1. 
+
+The covariance matrix is estimated as:
+$$V(\hat{\theta})=I^{-1}(\hat{\theta})$$ where $I$ is information matrix that is calculated as: $$I(\hat{\theta})=X^T \hat{W}X$$ where $\hat{W}$ is estimated variance of $Y$ that has the following diagonal matrix $n*n$:
+$$\begin{bmatrix}
+    \pi_{1}(1-\pi_{1}) & \dots & 0 \\
+    \vdots & \ddots & \vdots \\
+    0 & \dots & \pi_{n}(1-\pi_{n}) \\
+\end{bmatrix}$$
+Thus, finally we have:
+$$V(\hat{\theta})=[\sum_i^n{\pi_i(1-\pi_i)X^TX}]^{-1}=$$ $$=(X^T \hat{W}X)^{-1}$$
+standard errors then are just squared root from diagonal of $V(\hat{\theta})$ and the test statistic for $\hat{\theta}$ follows standard normal distribution and is calculated as: 
+$$\frac{\hat{\theta}}{se_{\hat{\theta}}} \sim N(0,1)$$
 
 # Rare events data
 
