@@ -47,7 +47,6 @@ equalparts(
 ```
 
 
-
 The note section is constructed as follows:  
 1. Pearson's r (note, $Cor(X,Y) = \frac{Cov(X,Y)}{\sqrt{D(X)D(Y)}}$ that measures ***linear*** association)  
 2. Lower and higher bound of 95% CI of correlation coefficient are in square brackets  

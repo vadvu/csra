@@ -10,15 +10,15 @@
 \describe{
 \item{iso3}{Country code in "iso3c" \href{https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3}{format}}
 \item{year}{Year}
-\item{NVC_1.3_NONVIOL}{Year}
-\item{NVC_1.3_VIOL}{Year}
-\item{VDEM_v2x_polyarchy}{Electoral democracy index (0,1)}
-\item{VDEM_v2x_polyarchy_lag}{{Electoral democracy index (0,1) at time t-1 for country i}
+\item{NVC_1.3_NONVIOL}{Binary indicator. Do protestors primary use nonviolent tactic? 1 = Yes}
+\item{NVC_1.3_VIOL}{Binary indicator. Do protestors primary use violent tactic? 1 = Yes}
+\item{VDEM_v2x_polyarchy}{Electoral democracy index (0,1) from V-Dem project}
+\item{VDEM_v2x_polyarchy_lag}{Electoral democracy index (0,1) at time t-1 for country i}
 }
 }
 }
 \source{
-(NAVCO 1.3)\link{https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ON9XND}, (VDEM)\link{https://v-dem.net/data/the-v-dem-dataset/}
+\href{https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ON9XND}{NAVCO 1.3}, \href{https://v-dem.net/data/the-v-dem-dataset/}{VDEM}
 }
 \usage{
 datex
