@@ -293,11 +293,28 @@ matrix</strong>:<br>
 <h4 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h4>
 <p>The formula for linear regression with <span class="math inline">\(k\)</span> explanatory variables is: <span class="math display">\[y_i =
-\beta_0+\sum_k{\beta_kx_{i,k}}+\epsilon_i\]</span> We want to minimize
-RSS (<em>Residuals Sum of Squares</em>) that is deviations of our
-modeled (predicted) values of <span class="math inline">\(y\)</span>
-with a hat (<span class="math inline">\(\hat y\)</span>) from observed
-(real) values of <span class="math inline">\(y\)</span>. Note, <span class="math inline">\(\hat y=\beta_0+\sum_k{\beta_kx_{i,k}}\)</span>, so
+\beta_0+\sum_k{\beta_kx_{i,k}}+\epsilon_i\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is a dependent variable
+(outcome) that we try to explain/predict by some independent
+(explanatory) variables <span class="math inline">\(x\)</span>.
+Basically, in the equation above there are two parts:</p>
+<ol style="list-style-type: decimal">
+<li>Systematic: <span class="math inline">\(\beta_0+\sum_k{\beta_kx_{i,k}}\)</span>
+</li>
+<li>Stochastic: <span class="math inline">\(\epsilon_i \sim
+N(0,\sigma^2)\)</span>
+</li>
+</ol>
+<p>The stochastic part is fully random. To understand that in another
+way, let me reformulate the formula: <span class="math display">\[\mu_i=\beta_0+\sum_k{\beta_kx_{i,k}}\]</span>
+<span class="math display">\[y_i \sim N(\mu_i,\sigma^2)\]</span> In
+other words, by the model we try to predict average values of dependent
+variable assuming that its mean <span class="math inline">\(\mu\)</span>
+is conditional on some independent factors <span class="math inline">\(x\)</span>. But how to estimate parameters <span class="math inline">\(\beta\)</span>?</p>
+<p>Turning to the technical issues, we minimize RSS (<em>Residuals Sum
+of Squares</em>) that is deviations of our modeled (predicted) values of
+<span class="math inline">\(y\)</span> with a hat (<span class="math inline">\(\hat y\)</span>) from observed (real) values of
+<span class="math inline">\(y\)</span>. Note, <span class="math inline">\(\hat y=\beta_0+\sum_k{\beta_kx_{i,k}}\)</span>, so
 we can write <em>RSS</em> as: <span class="math display">\[RSS=\sum_i{(y_i-b_1x_{i,1}-...b_kx_{i,k}})^2\]</span>
 or <span class="math display">\[RSS=\sum_i{(y_i-\hat y_i)^2}\]</span>
 Minimization of that sum (the quadratic amount of deviations between
@@ -569,6 +586,7 @@ Error term structure: <span class="math inline">\(\varepsilon_{i,t} =
 \varepsilon_i + \varepsilon_t\)</span> (<em>cross-sectional</em>
 variance + <em>time dimension</em> variance).</p>
 <p><strong>What FE models show?</strong></p>
+<p>See <span class="citation">Kropko and Kubinec (2020)</span></p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>Unit FE:</strong> represents the average effect of a
@@ -642,8 +660,8 @@ cluster has unique value of GDP -&gt; perfect multicollinearity)</li>
 effects and coefficient heterogeneity across higher-level
 units</strong>, the ‘good old’ simple <strong>OLS regression with
 cluster-robust standard errors and fixed effects</strong> at higher
-levels should be retained as a valid alternative to MLM.” (Oshchepkov,
-Shirokanova, 2022)</li>
+levels should be retained as a valid alternative to MLM.” <span class="citation">(Oshchepkov and Shirokanova 2022)</span>
+</li>
 <li>When <strong>size of clusters</strong> (number of observation in
 each) <strong>is small</strong> ME are better and more stable</li>
 </ol>
@@ -721,15 +739,15 @@ N(0,1)\]</span></p>
 events</strong> data that can be considered as <strong>marginal
 unbalanced binary data</strong> due to the strong predominance of one
 class (no event). Therefore, specific methods are required to analyze
-them.</p>
-<p>One such method is logistic regression with a special estimator
-(Firth, 1993; Kosmidis et al., 2020) that transforms ML to make it
-consistent in case of imbalanced data problem.</p>
+them <span class="citation">(King and Zeng 2001)</span>.</p>
+<p>One such method is logistic regression with a special version of ML
+estimator <span class="citation">(Kosmidis and Firth 2009; King and Zeng
+2001)</span> to make it consistent and less biased in case of imbalanced
+data problem.</p>
 <p>One more approach involves deliberately removing a significant number
-of ’0’s to balance the number of observations in both classes (known as
-under-sampling with matching, discussed in Menardi and Torelli, 2014).
-This approach enables the use of classical logistic regression without
-the concern of imbalance.</p>
+of ’0’s to balance the number of observations in both classes (it can be
+achieved via mathcing procedures). This approach enables the use of
+classical logistic regression without the concern of imbalance.</p>
 <p>As a nonparametric method, one can use a random forest model with a
 quantile classifier (O’Brien &amp; Ishwaran, 2019), which is
 specifically designed for classifying unbalanced data. It is important
@@ -740,6 +758,32 @@ the form and assumption through simple operations on the variable, such
 as logarithmization or representing the factor as a polynomial. This
 approach can lead to reasonably accurate estimates.</p>
 <p>Next, we will discuss each approach and its implemintation.</p>
+</div>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-king_logistic_2001" class="csl-entry">
+King, Gary, and Langche Zeng. 2001. <span>“Logistic
+<span>Regression</span> in <span>Rare</span> <span>Events</span>
+<span>Data</span>.”</span> <em>Political Analysis</em> 9 (2): 137–63. <a href="https://doi.org/10.1093/oxfordjournals.pan.a004868" class="external-link">https://doi.org/10.1093/oxfordjournals.pan.a004868</a>.
+</div>
+<div id="ref-kosmidis_bias_2009" class="csl-entry">
+Kosmidis, I., and D. Firth. 2009. <span>“Bias Reduction in Exponential
+Family Nonlinear Models.”</span> <em>Biometrika</em> 96 (4): 793–804. <a href="https://doi.org/10.1093/biomet/asp055" class="external-link">https://doi.org/10.1093/biomet/asp055</a>.
+</div>
+<div id="ref-kropko_interpretation_2020" class="csl-entry">
+Kropko, Jonathan, and Robert Kubinec. 2020. <span>“Interpretation and
+Identification of Within-Unit and Cross-Sectional Variation in Panel
+Data Models.”</span> Edited by Talib Al-Ameri. <em>PLOS ONE</em> 15 (4):
+e0231349. <a href="https://doi.org/10.1371/journal.pone.0231349" class="external-link">https://doi.org/10.1371/journal.pone.0231349</a>.
+</div>
+<div id="ref-oshchepkov_bridging_2022" class="csl-entry">
+Oshchepkov, Aleksey, and Anna Shirokanova. 2022. <span>“Bridging the Gap
+Between Multilevel Modeling and Economic Methods.”</span> <em>Social
+Science Research</em> 104 (May): 102689. <a href="https://doi.org/10.1016/j.ssresearch.2021.102689" class="external-link">https://doi.org/10.1016/j.ssresearch.2021.102689</a>.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
