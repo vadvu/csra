@@ -2,6 +2,8 @@
 title: "Materials for CSRA students/interns"
 output: rmarkdown::html_vignette
 toc_depth: 3
+bibliography: references.bib 
+biblio-style: apalike
 ---
 
 ```{r, include = FALSE}
@@ -128,7 +130,18 @@ $$V(X)=E[(X-E(X))*(X-E(X))^T]$$
 
 The formula for linear regression with $k$ explanatory variables is:
 $$y_i = \beta_0+\sum_k{\beta_kx_{i,k}}+\epsilon_i$$
-We want to minimize RSS (*Residuals Sum of Squares*) that is deviations of our modeled (predicted) values of $y$ with a hat ($\hat y$) from observed (real) values of $y$. Note, $\hat y=\beta_0+\sum_k{\beta_kx_{i,k}}$, so we can write *RSS* as: 
+
+where $y$ is a dependent variable (outcome) that we try to explain/predict by some independent (explanatory) variables $x$. Basically, in the equation above there are two parts: 
+
+1. Systematic: $\beta_0+\sum_k{\beta_kx_{i,k}}$
+2. Stochastic: $\epsilon_i \sim N(0,\sigma^2)$
+
+The stochastic part is fully random. To understand that in another way, let me reformulate the formula: 
+$$\mu_i=\beta_0+\sum_k{\beta_kx_{i,k}}$$ 
+$$y_i \sim N(\mu_i,\sigma^2)$$ 
+In other words, by the model we try to predict average values of dependent variable assuming that its mean $\mu$ is conditional on some independent factors $x$. But how to estimate parameters $\beta$? 
+
+Turning to the technical issues, we minimize RSS (*Residuals Sum of Squares*) that is deviations of our modeled (predicted) values of $y$ with a hat ($\hat y$) from observed (real) values of $y$. Note, $\hat y=\beta_0+\sum_k{\beta_kx_{i,k}}$, so we can write *RSS* as: 
 $$RSS=\sum_i{(y_i-b_1x_{i,1}-...b_kx_{i,k}})^2$$
 or
 $$RSS=\sum_i{(y_i-\hat y_i)^2}$$
@@ -288,6 +301,8 @@ Error term structure: $\varepsilon_{i,t} = \varepsilon_i + \varepsilon_t$ (*cros
 
 **What FE models show?**    
 
+See @kropko_interpretation_2020
+
 1. **Unit FE:** represents the average effect of a unit-increase in x on y as each variable *changes over time*, generalized to all cases (*as GDP increases for a country over time, how does the quality of its democracy change over time?*) 
 2. **Time FE:** time FE coefficients represent the average effect of a unit-increase in x on y as each variable *changes from case to case*, generalized across all time points (*how much more democratic are wealthier countries than poorer countries at any point in time?*)
 
@@ -316,7 +331,7 @@ In majority of cases FE is better then RE due to not so strict assumptions. If a
 1. If data has hierarchy (nested clusters) and we want to separate within and between variance  
 2. There are cluster's variables -> FE might be in perfect collinearity situation if there is just 1 year of observation (each cluster has unique value of GDP -> perfect multicollinearity) 
 3. If sample is fully random (surveys)  
-4. In other cases - FE: "**without analyzing the contextual effects and coefficient heterogeneity across higher-level units**, the ‘good old’ simple **OLS regression with cluster-robust standard errors and fixed effects** at higher levels should be retained as a valid alternative to MLM." (Oshchepkov, Shirokanova, 2022) 
+4. In other cases - FE: "**without analyzing the contextual effects and coefficient heterogeneity across higher-level units**, the ‘good old’ simple **OLS regression with cluster-robust standard errors and fixed effects** at higher levels should be retained as a valid alternative to MLM." [@oshchepkov_bridging_2022] 
 5. When **size of clusters** (number of observation in each) **is small** ME are better and more stable 
 
 ## Limited DV
@@ -353,12 +368,17 @@ $$\frac{\hat{\theta}}{se_{\hat{\theta}}} \sim N(0,1)$$
 
 # Rare events data
 
-Revolutions, civil wars, defaults, and coups are **rare events** data that can be considered as **marginal unbalanced binary data** due to the strong predominance of one class (no event). Therefore, specific methods are required to analyze them. 
+Revolutions, civil wars, defaults, and coups are **rare events** data that can be considered as **marginal unbalanced binary data** due to the strong predominance of one class (no event). Therefore, specific methods are required to analyze them [@king_logistic_2001]. 
 
-One such method is logistic regression with a special estimator (Firth, 1993; Kosmidis et al., 2020) that transforms ML to make it consistent in case of imbalanced data problem. 
+One such method is logistic regression with a special version of ML estimator [@kosmidis_bias_2009; @king_logistic_2001] to make it consistent and less biased in case of imbalanced data problem. 
 
-One more approach involves deliberately removing a significant number of '0's to balance the number of observations in both classes (known as under-sampling with matching, discussed in Menardi and Torelli, 2014). This approach enables the use of classical logistic regression without the concern of imbalance.
+One more approach involves deliberately removing a significant number of '0's to balance the number of observations in both classes (it can be achieved via mathcing procedures). This approach enables the use of classical logistic regression without the concern of imbalance.
 
 As a nonparametric method, one can use a random forest model with a quantile classifier (O'Brien & Ishwaran, 2019), which is specifically designed for classifying unbalanced data. It is important to note that this method allows for the avoidance of assumptions about the form of the relationship. In parametric models, authors are assumed to make an assumption of linearity, but with this method, one can change the form and assumption through simple operations on the variable, such as logarithmization or representing the factor as a polynomial. This approach can lead to reasonably accurate estimates.
 
 Next, we will discuss each approach and its implemintation. 
+
+
+# References
+
+
