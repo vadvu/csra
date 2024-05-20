@@ -87,9 +87,17 @@ equalparts <-
            return_data = FALSE,
            save_plot = FALSE,
            name_save_plot = "plot") {
+
+    `%notin%` = Negate(`%in%`)
+
+    if(independent %notin% colnames(data) | dependent %notin% colnames(data)){
+      stop("Independent or Dependent variables are not found in the data")
+    }
+
     dep_n <- which(colnames(data) == dependent)
     ind_n <- which(colnames(data) == independent)
     if (lag_independent == T) {
+      if(lag_code %notin% colnames(data)){stop("lag_code is not provided (or not found in the data), while lag_independent = T")}
       if (lead) {
         data <- data %>%
           group_by(get(lag_code)) %>%
@@ -106,9 +114,9 @@ equalparts <-
     }
 
     data1 <- as.data.frame(stats::na.omit(data[, c(ind_n, dep_n)]))
+    if(n<2){stop("n should be >=2")}
     data1$parts <- dplyr::ntile(data1[, 1], n)
-    s <-
-      as.data.frame(sjmisc::flat_table(data1, parts, get(dependent)))
+    s <- as.data.frame(sjmisc::flat_table(data1, parts, get(dependent)))
     s["means"] <- NA
     s["min"] <- NA
     s["max"] <- NA
@@ -184,7 +192,7 @@ equalparts <-
               ymin = low95CI * (Freq_1 + Freq_0)
             ),
             size = 0.1,
-            height = 0.3)
+            width = 0.1)
         }
 
 
@@ -280,7 +288,7 @@ equalparts <-
           pl <-
             pl + geom_errorbarh(aes(xmax = prc95, xmin = prc5),
                                 size = 0.1,
-                                height = 0.6)
+                                width = 0.1)
         }
         if (conf_bars) {
           pl <-
