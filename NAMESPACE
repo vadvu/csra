@@ -2,6 +2,7 @@
 
 export("%>%")
 export(U_shape_test)
+export(eba)
 export(equalparts)
 export(goldclass)
 export(sdiff)
