@@ -1,54 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://vadvu.github.io/csra/404.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/articles/csra.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/articles/student.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/U_shape_test.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/datex.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/eba.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/equalparts.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/goldclass.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/revolutions.html</loc>
-  </url>
-  <url>
-    <loc>https://vadvu.github.io/csra/reference/sdiff.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://vadvu.github.io/csra/404.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/LICENSE.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/articles/csra.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/articles/index.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/articles/student.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/authors.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/index.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/news/index.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/U_shape_test.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/calibration.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/datex.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/eba.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/edv.fgls.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/equalparts.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/goldclass.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/index.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/pipe.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/revolutions.html</loc></url>
+<url><loc>https://vadvu.github.io/csra/reference/sdiff.html</loc></url>
 </urlset>
+
