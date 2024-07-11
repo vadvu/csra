@@ -140,7 +140,7 @@ The next function `calibration()` gives an in-sample calibration graph for binar
 2. In each bin, compute: (a) mean predicted probability and (b) the average fraction of 1s
 3. Plot them and look at systematic deviation from 45 line. If there is no such a deviations, the model is good.
 
-The idea of that function I got from Gary King, from his [lecture](https://www.youtube.com/watch?v=_L6zUSNMXHU), while I changed it a little bit. 
+The function was inspired by Gary King, the idea came from his [lecture](https://www.youtube.com/watch?v=_L6zUSNMXHU), while I changed it a little bit. 
 
 ```{r}
 logit <- glm(data = datex, 
@@ -151,56 +151,24 @@ calibration(logit)
 ```
 
 
-## Example 4: `U_shape_test()`
+## Example 4: `eba()`
 
-Another function (in the DEMO stage) is the `U_shape_test()`, which aims to detect hump-shaped forms of links. Currently, only a rare events logistic model has been implemented, although the logic is suitable for all GLMs.  
-What is U-shape? Simply put, it is the link between variables that is similar to parabola. Usually, it is modeled as polynomial term in the regression equitation, but it's not the only one option. What is really important in the case of U-shape is that there is only one extreme point (as parabola has). Moreover, the slope of such curve should be positive (negative) on the interval $[x_{min},x_{midpoint}]$ and negative (positive) on the interval $[x_{midpoint},x_{max}]$. Let's say we have such equation:  
-$$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$  
-where $\beta_k$ are coefficients, $x$ is our variable of interest which we assume has a U-shape relationship with $y$ by this part of formula: $\beta_1\times x_i + \beta_2\times f(x_i)$, $z_{k}$ are control variables, $y$ is our dependent variable and $\varepsilon$ is a error term.  
-Then by definition of the U-shape that described earlier, this inequality should be implied:  
-$$\beta_1 + \beta_2\times f'(x_i \in [x_{min},x_{midpoint}]) <0<\beta_1 + \beta_2\times f'(x_i \in [x_{midpoint}, x_{max}])$$  
-This condition can be reformulated as 2 hypotheses for subsampled models:  
-$$y_i = \beta_0 + \beta_{lower}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{min},x_{midpoint}] (1)$$  
-and  
-$$y_i = \beta_0 + \beta_{higher}\times x_i + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i, x \in [x_{midpoint}, x_{max}] (2)$$    
-And hypotheses are (for inverse U-shape):  
-+ $H_L: \beta_{lower}>0$, for equitation 1  
-+ $H_H: \beta_{higher}<0$, for equitation 2  
+Extreme Boundary Analysis (EBA), proposed in its discussed view by Sala-i-Martin (1997) subsequent modifications proposed by other authors (Hegre and Sambanis 2006), is a method for testing the robustness of an estimate of a variable by running models with all possible combinations of other variables. 
 
-
-This method in the function `U_shape_test()` operates more complicated in the following way:  
-1. The full model is estimated on a sample with a polynomial term. Let's say it is:  
-$$y_i = \beta_0 + \beta_1\times x_i + \beta_2\times x_i^2 + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$
-where $\beta_k$ are coefficients, $x$ is our variable of interest which we assume has a U-shape relationship with $y$,
-$z_{k}$ are control variables, $y$ is our dependent variable and $\varepsilon$ is a error term.    
-2. Divide the sample into two subsamples - the first being below the midpoint (which is identified as the vertex of the parabola from the polynomial term: $\frac{-\beta_1}{2\times \beta_2}$), and the second being above it.  
-3. Estimate two models on the two subsamples. A hump-shaped relationship assumes that there is both an ascending and a descending part. So, in order to test a hump, it is necessary to have significant positive and negative coefficients on the first and second subsample respectively.  
-4. A semiparametric model is estimated without assumptions about the form of the link. The GAM method is used for this purpose. The variable of interest is modelled as a smooth term using cubic splines while other variables are modelled using parametric regressions. In our case it is:  
-$$y_i = \beta_0 + f(x_i) + \sum_{}^{} \beta_k \times z_{i,k} + \varepsilon_i$$
-where $f(x_i)$ is a smooth term.  
-5. ANOVA test between the model with a polynomial term (1st step) and GAM model (4th step). This test is needed to identify whether the polynomial term provides a better or not worse fit than the link found by the GAM splines. If $p > 0.1$, then the polynomial is considered a good approximation.  
-6. Bootstrap of a midpoint ($\frac{-\beta_1}{2\times \beta_2}$) for constructing CI. This is optional, but highly recommended stage. Now it works unstable in the function...   
-7. This is the final stage.   
-**IF** the polynomial term is significant (1st stage) **AND** there are significant opposite signs on subsamples (2nd stage), **AND** the GAM term is significant in terms of EDF significance (4th stage), **AND** the ANOVA test's p-value is greater than 0.1 (5th stage), **THEN** there exists a hump-shaped or U-shaped link between the variables. In this case, the polynomial term is suitable for approximating such a relationship.  
-
-
-This approach is based on 2 papers that define the overall strategy for identifying a U-shaped relationship with continuous data (i.e. with a linear regression model):    
-- Lind, J. T., & Mehlum, H. (2010). With or without U? The appropriate test for a U‐shaped relationship. Oxford bulletin of economics and statistics, 72(1), 109-118.  
-- Simonsohn, U. (2018). Two lines: A valid alternative to the invalid testing of U-shaped relationships with quadratic regressions. Advances in Methods and Practices in Psychological Science, 1(4), 538-555.  
-
-```{r}
-U_shape_test(
-  data = datex, #our data
-  dep = "NVC_1.3_NONVIOL", #dependent variable
-  ind = "VDEM_v2x_polyarchy_lag", #independent var
-  cnt = c("UN_Median_Age", "UN_Total_Population_log"), #control vars
-  boot = "none", #bootstrap for middle point analysis - we do not use it in an example 
-  n = 1000, #number of bootstrap deaws
-  const = T, #We need constan in a model
-  HC = T, #type of SE
-  plot = T,
-  tab_save = FALSE #we do not need to save regression table
-)
+``` r
+eba.out <- eba(y = "NVC_1.3_VIOL", #DV
+               x = "UN_Median_Age", #Var of interest
+               const = "year", #FE 
+               control = c("VDEM_v2x_polyarchy_lag",
+                           "UN_Total_Population_log", 
+                           "One_more_var", 
+                           "One_more_var",
+                           "One_more_var"), 
+               data = datex, 
+               nvar = 3, #How many controls include in each model?
+               model = "logit", 
+               cl = NULL #Numver of engines to use, default is `NULL` for one engine
+               )
 ```
 
 
@@ -237,3 +205,11 @@ corrected_model1 = edv.fgls(lm1, DVvariance = variance_y_vector) # if variance o
 corrected_model2 = edv.fgls(lm1, n = number_of_n_for_each_y_vector) # if variance of each y is unknwon 
 
 ```
+
+## References
+
+Lewis, J. B., & Linzer, D. A. (2005). Estimating regression models in which the dependent variable is based on estimates. *Political analysis*, 13(4), 345-364.
+
+Hegre, H., & Sambanis, N. (2006). Sensitivity analysis of empirical results on civil war onset. *Journal of conflict resolution*, 50(4), 508-535.
+
+Xavier X. Sala-I-Martin. (1997). I Just Ran Two Million Regressions. *The American Economic Review*, 87(2), 178–183.
