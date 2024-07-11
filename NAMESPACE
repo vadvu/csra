@@ -2,7 +2,9 @@
 
 export("%>%")
 export(U_shape_test)
+export(calibration)
 export(eba)
+export(edv.fgls)
 export(equalparts)
 export(goldclass)
 export(sdiff)

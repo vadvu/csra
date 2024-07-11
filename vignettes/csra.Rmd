@@ -26,7 +26,7 @@ library(csra)
 This is a basic example that shows you how the main (and really powerful) function `equalparts()` works:
 
 ```{r}
-data <- data("dataex") #it's an example panel "long" data that you can use
+data("datex") #it's an example panel "long" data that you can use
 
 #Now let's try to analyze how VDEM democracy index affects revolutionary situations
 equalparts(
@@ -58,7 +58,6 @@ Plot that is returned by default can be easily changed by [ggplot2](https://gith
 
 ```{r}
 library(ggplot2)
-data("datex")
 
 plot <- equalparts(
   data = datex,
@@ -125,14 +124,34 @@ We firstly simulate two random variables - $X$ and $Y$. Lets assume that they sh
 In our simulated example, $X \sim N(0.5,2^2)$ and $Y \sim N(2,2^2)$. So, indeed there is a difference in means. Lets try to statistically support it. 
 
 ```{r}
-x = rnorm(50, 0.5, 2)
-y = rnorm(50, 2, 2)
-sdiff(x, y, n = 1000)
+x = rnorm(50, 0.5, 2) #E(x) = 0.5
+y = rnorm(50, 2, 2) #E(y) = 2
+sdiff(y, x, n = 1000) #True E(y)-E(x) = 1.5
 ```
 
 Indeed, there is a statistically significant difference and one can reject $H_0$ at any acceptable confidence level. 
 
-## Example 3: `U_shape_test()`
+
+## Example 3: `calibration()`
+
+The next function `calibration()` gives an in-sample calibration graph for binary outcome models. In other words, it is a tool for model evaluation. The logic of that test is straighforward: 
+
+1. Get estimated probabilities from a model and sort them into **bins** of equal width. By default function makes 10 equal parts. 
+2. In each bin, compute: (a) mean predicted probability and (b) the average fraction of 1s
+3. Plot them and look at systematic deviation from 45 line. If there is no such a deviations, the model is good.
+
+The idea of that function I got from Gary King, from his [lecture](https://www.youtube.com/watch?v=_L6zUSNMXHU), while I changed it a little bit. 
+
+```{r}
+logit <- glm(data = datex, 
+             NVC_1.3_VIOL ~ UN_Total_Population_log + UN_Median_Age + VDEM_v2x_polyarchy_lag,
+             family = binomial(link = "logit"))
+
+calibration(logit)
+```
+
+
+## Example 4: `U_shape_test()`
 
 Another function (in the DEMO stage) is the `U_shape_test()`, which aims to detect hump-shaped forms of links. Currently, only a rare events logistic model has been implemented, although the logic is suitable for all GLMs.  
 What is U-shape? Simply put, it is the link between variables that is similar to parabola. Usually, it is modeled as polynomial term in the regression equitation, but it's not the only one option. What is really important in the case of U-shape is that there is only one extreme point (as parabola has). Moreover, the slope of such curve should be positive (negative) on the interval $[x_{min},x_{midpoint}]$ and negative (positive) on the interval $[x_{midpoint},x_{max}]$. Let's say we have such equation:  
@@ -202,4 +221,19 @@ polity5data$goldstone_regime <- goldclass(exrec = polity5data$exrec, parcomp = p
 
 ```
 
+### FGLS model for estimated dependent variable
 
+The `edv.fgls` function is based completely on the following paper: 
+
+Lewis, J. B., & Linzer, D. A. (2005). Estimating regression models in which the dependent variable is based on estimates. *Political analysis*, 13(4), 345-364.
+
+There are two possible strategies. If variance of each $y_i$ is unknown, then numeric vector of number of observations $N=[n_1,...,n_i]$ on which each $y_i$ was estimated should be provided. For example, $y$ - mean of housholds income, then `n` is the number of housholds.
+
+The second possible situation is when a variance of each $y_i$ is known. In that case, you should provide `DVvariance` argument in the function with numeric vector of such variances $V=[v_1,...,v_i]$. 
+
+``` r
+lm1 <- lm(estimated_y ~ x, data = data)
+corrected_model1 = edv.fgls(lm1, DVvariance = variance_y_vector) # if variance of each y is known
+corrected_model2 = edv.fgls(lm1, n = number_of_n_for_each_y_vector) # if variance of each y is unknwon 
+
+```
