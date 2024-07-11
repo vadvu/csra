@@ -1,3 +1,5 @@
+# csra 1.2.2
+
 # csra 1.1.2
 
 * Some fixes in `U-shape`, adding of `goldclass` function.
